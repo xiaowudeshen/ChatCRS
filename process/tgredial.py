@@ -80,12 +80,14 @@ class Tgredial():
                                     knowledge = items.copy()
                                 else:
                                     missing_knowledge.append(item_key)
-
+                # if "据说这是一部干净而有力" in turn["content"]:
+                #     breakpoint()
                 turn_dict = {
                         "role": turn['role'], #string, seeker/recommender
                         "message": turn["content"],  #string
                         "goal": goals, #string
-                        "topic": topics, #string
+                        "topic": [list(filter(None, topics))], #string
+                        # "original_topic": topics, #string
                         "knowledge": knowledge,  #list, user_item_history
                         "mention": dial["mentionMovies"][turn["local_id"]] if turn["local_id"] in dial["mentionMovies"] else [] #list
                     }
@@ -108,5 +110,6 @@ class Tgredial():
 
 if __name__ == "__main__":
 
-    datafolder_path = "../TGReDial"
+    datafolder_path = "../../TGReDial"
     tgredial = Tgredial(datafolder_path)
+    

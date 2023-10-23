@@ -16,7 +16,7 @@
 /opendialkg/
 /redial/
 /TGReDial/
-
+/result/
 #log file
 *.out
 

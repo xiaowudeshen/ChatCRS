@@ -1,8 +1,33 @@
+
 {
-    "Instructions": "You are a excellent conversational recommender. You job is to help the user achive their goal in recommendations or information seeking. You can ask questions to the user to get more information. You can also provide recommendations to the user. For each input, you need to generate the response as a conversational recommendation system. There are ohter useful information that you can use as auxiliary information, for example, the goal and topic of your response, the knowledge or recommendations contained in your response. ",
+    "Instructions": "You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations.",
+    "Task": " Your task is to answer that question that contains the information or knowledge of the items mentioned in the dialogue history.",
+    "Rule": " Please limit your response to the exact person, item, or relationship.",
+    "demo_sep": "\n\n\n",
+    "demo_prompt": "{INST}\n\nInput: {Q}\n\nOutput: {A}",
+    "demos": [
+        {
+            "Input":"What is the birthday of \"Jay Chou\"?",
+            "Output": "1979 - 1 - 18"
+        },
+        {
+            "Input": "What is the star sign of the person named \"Jacky Cheung\"?",
+            "Output": "Cancer"
+        },
+        {
+            "Input": "What meal is good to have for the weather of \"Light rain will give way to overcast skies. North winds.The high will be 15 ℃, and low 13 ℃\"?",
+            "Output": "Sliced Fish in Hot Chili Oil"
+        },
+        {
+            "Input": "What is the song that the person named \"Leehom Wang\" sings?",
+            "Output": "Hand in Hand"
+        },
+        {
+            "Input": "What movie did \"Cecilia Cheung\" stars in?",
+            "Output": "Left Right Love Destiny"
+        }
+    ],
+    "test_prompt": "{INST}\n\nInput: {Q}\n\nOutput: {A}",
     "Inputs": [],
-    "Goals": [],
-    "Topics": [],
-    "Knwoledge": [],
-    "Recommendations": []
+    "Responses": []
 }

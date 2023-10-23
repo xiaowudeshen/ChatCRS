@@ -3,7 +3,7 @@
 # This file is used to save the scripts for analysis
 # including the followings:
 # - dataset analysis
-# - result analysis
+
 
 
 import json
@@ -21,7 +21,7 @@ def Get_analysis_for_datasets():
     }
     result_dic = {}
     for dataset in dataset_dic:
-        data_dir = os.path.join("data_p", dataset)
+        data_dir = os.path.join("../data_p", dataset)
         for file in dataset_dic[dataset]:
             data_file = os.path.join(data_dir, file)
             with open(data_file, "r") as f:

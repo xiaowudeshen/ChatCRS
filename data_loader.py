@@ -1,59 +1,25 @@
 #date ; 29 sep 2023
 #author: Victor Li
-
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 import json
 import os
 import time
+import argparse
+from process.Knowledge import Question_for_relation
 
-
-def task1(data_j, guidance = 'none'):
+def task1(input_data, guidance = 'None'):
     #Name: CRS
     #convert the data into differen task format
     #task one: generate recommendation response
     #input: dialogue history
     #output: response
-    data_jl = []
-    for dial_id, dialogue in data_j.items():
-        dial_history = ''
-        for ti, turn in enumerate(dialogue['messages']):
-            if ti == 0 and turn["role"] == "Recommender":
-                mess = "[system]:" + turn["message"] + "\n"
-                dial_history += mess
-            elif turn["role"] == 'Seeker':
-                mess = "[user]:" + turn["message"] + "\n"
-                dial_history += mess
-            elif turn["role"] == 'Recommender':
-                if guidance == 'none':
-                    out_mess = dial_history + "[system]:"
-                elif guidance == 'goal':
-                    out_mess = dial_history + f"[goal]:{turn['goal']}\n[system]:"
-                elif guidance == 'topic':
-                    out_mess = dial_history + f"[topic]:{turn['topic']}\n[system]:"
-                elif guidance == 'knowledge':
-                    out_mess = dial_history + f"[knowledge]:{turn['knowledge']}\n[system]:"
-                elif guidance == "goal_topic":
-                    out_mess = dial_history + f"[goal]:{turn['goal']} [topic]:{turn['topic']}\n[system]:"
-                data_jl.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS','dial_history': out_mess, 'response': turn["message"]})
-                mess = "[system]:" + turn["message"] + "\n"
-                dial_history += mess
-
-    return data_jl
-
-def task2(data_j):
-    #Name: Chat
-    #convert the data into differen task format
-    #task two: generate chat response for chitchatting
-    #input: dialogue history
-    #output: response
-
-    #some example
-    CHAT_GOAL_LIST = ['chat', 'chatting', 'chitchat', 'chitchatting', 'talk', 'talking', 'free talk', 'free talking', 'free chat', 'free chatting']
-    #for durecdial
-    CHAT_GOAL_LIST = [ 'Say goodbye','再见' ,  'Greetings','寒暄', "Ask about user's name",'问 User 姓名', "Ask about user's gender",  '问 User 性别', "Ask about user's age", '问 User 年龄',"Ask about user's hobbies", '问 User 爱好',  'Ask about date' ,'问 日期',  'Ask about time','问 时间',  'Ask about weather','问 天气',   'Music on demand','音乐 点播',  'Play music','播放 音乐',    'Weather notification','天气 信息 推送']
-    #for tgredial
-    CHAT_GOAL_LIST = ['谈论', '反馈', '反馈，结束']
-    data_jl = []
-    for dial_id, dialogue in data_j.items():
+    
+    
+    output_data = []
+    for dial_id, dialogue in input_data.items():
         dial_history = ''
         for ti, turn in enumerate(dialogue['messages']):
             if ti == 0 and turn["role"] == "Recommender":
@@ -64,29 +30,92 @@ def task2(data_j):
                 dial_history += mess
             elif turn["role"] == 'Recommender':
                 out_mess = dial_history + "[system]:"
-                if turn["goal"] in CHAT_GOAL_LIST:
-                    data_jl.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CHAT','dial_history': out_mess, 'response': turn["message"]})
+                if guidance == 'None':
+                    output_data.append({'dial-turn_id': f"{dial_id}-{ti}",'task': 'CRS','Input': out_mess, 'Output': turn["message"]})
+                elif guidance in task_dic[dataset_name]:
+                    if guidance == 'GOAL':
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'GOAL','Input': out_mess, 'guide_message': f"[goal]:{turn['goal']}", 'Output': turn["message"]})
+                        # out_mess = dial_history + f"[goal]:{turn['goal']}\n[system]:"
+                    elif guidance == 'TOPIC':
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'TOPIC','Input': out_mess, 'guide_message': f"[topic]:{turn['topic']}", 'Output': turn["message"]})
+                        # out_mess = dial_history + f"[topic]:{turn['topic']}\n[system]:"
+                    elif guidance == 'KNOWLEDGE':
+                        # out_mess = dial_history + f"[knowledge]:{turn['knowledge']}\n[system]:"
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'KNOWLEDGE','Input': out_mess, 'guide_message': f"[knowledge]:{turn['knowledge']}", 'Output': turn["message"]})
+                    elif guidance == "REC":
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'REC','Input': out_mess, 'guide_message': f"[recommnedation]:{turn['REC']}", 'Output': turn["message"]})
+                    elif guidance == "all":
+                        # out_mess = dial_history + f"[goal]:{turn['goal']} [topic]:{turn['topic']}\n[system]:"
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'ALL','Input': out_mess, 'guide_message': f"[goal]:{turn['goal']}\n [topic]:{turn['topic']}\n [recommnedation]:{turn['REC']}\n [knowledge]:{turn['knowledge']}", 'Output': turn["message"]})
+                
                 mess = "[system]:" + turn["message"] + "\n"
                 dial_history += mess
 
-    return data_jl
+    return output_data
+
+def task2(input_data, CHAT_GOAL_LIST ):
+    #Name: Chat
+    #convert the data into differen task format
+    #task two: generate chat response for chitchatting
+    #input: dialogue history
+    #output: response
+    
+    #some example
+    # CHAT_GOAL_LIST = ['chat', 'chatting', 'chitchat', 'chitchatting', 'talk', 'talking', 'free talk', 'free talking', 'free chat', 'free chatting']
+    # #for durecdial
+    CHAT_GOAL_LIST = [ 'Say goodbye', '再见' ,  'Greetings','寒暄', "Ask about user's name",'问 User 姓名', "Ask about user's gender",  '问 User 性别', "Ask about user's age", '问 User 年龄',"Ask about user's hobbies", '问 User 爱好',  'Ask about date' ,'问 日期',  'Ask about time','问 时间',  'Ask about weather','问 天气',   'Music on demand','音乐 点播',  'Play music','播放 音乐',    'Weather notification','天气 信息 推送']
+    # #for tgredial
+    # CHAT_GOAL_LIST = ['谈论', '反馈', '反馈，结束']
+    output_data = []
+    for dial_id, dialogue in input_data.items():
+        dial_history = ''
+        for ti, turn in enumerate(dialogue['messages']):
+            if ti == 0 and turn["role"] == "Recommender":
+                mess = "[system]:" + turn["message"] + "\n"
+                dial_history += mess
+            elif turn["role"] == 'Seeker':
+                mess = "[user]:" + turn["message"] + "\n"
+                dial_history += mess
+            elif turn["role"] == 'Recommender':
+                out_mess = dial_history + "[system]:"
+                # breakpoint()
+                if len(turn["goal"]) > 1:
+                    breakpoint()
+                if turn["goal"][0] in CHAT_GOAL_LIST:
+                    output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CHAT','Input': out_mess, 'Output': turn["message"]})
+                mess = "[system]:" + turn["message"] + "\n"
+                dial_history += mess
+
+    return output_data
 
 
-def check_recommendation(turn):
+def check_recommendation(turn, dataset):
     if turn["mention"] == []:
         return False, None
     else:
-        return True, None
+        if "DuRecDial" in dataset:
+            if len(turn["mention"]) > 1:
+                raise Exception("there are more than 1 recommendation in DuRecDial Conversation")
+            else:
+                return True, turn["mention"][0]
+        elif "TG-Redial" in dataset:
+            if len(turn["mention"]) > 2:
+                raise Exception("there are more than 1 recommendation in TG-Redial Conversation")
+            elif not "推荐电影" in turn_dict["goal"]:
+                raise Exception("the goal is not recommendation in TG-Redial Conversation")
+            else:
+                return True, turn["mention"][1].split("(")[0]
 
-def task3(data_j, guidance = 'none'):
+
+def task3(input_data,  dataset, guidance = 'None'):
     #Name: REC
     #convert the data into differen task format
     #task three: generate recommendation response
     #input: dialogue history
     #output: recommendation items
 
-    data_jl = []
-    for dial_id, dialogue in data_j.items():
+    output_data = []
+    for dial_id, dialogue in input_data.items():
         dial_history = ''
         for ti, turn in enumerate(dialogue['messages']):
             if ti == 0 and turn["role"] == "Recommender":
@@ -96,34 +125,31 @@ def task3(data_j, guidance = 'none'):
                 mess = "[user]:" + turn["message"] + "\n"
                 dial_history += mess
             elif turn["role"] == 'Recommender':
-                Rec, Item = check_recommendation(turn)
+                Rec, Item = check_recommendation(turn, dataset)
                 if Rec:
-                    if guidance == 'none':
-                        out_mess = dial_history + "[recommendation item]:"
-                    elif guidance == 'goal':
-                        out_mess = dial_history + f"[goal]:{turn['goal']}\n[recommendation item]:"
-                    elif guidance == 'topic':
-                        out_mess = dial_history + f"[topic]:{turn['topic']}\n[recommendation item]:"
-                    elif guidance == 'knowledge':
-                        out_mess = dial_history + f"[knowledge]:{turn['knowledge']}\n[recommendation item]:"
-                    elif guidance == "goal_topic":
-                        out_mess = dial_history + f"[goal]:{turn['goal']} [topic]:{turn['topic']}\n[recommendation item]:"
-                    out_mess = dial_history + "[system]:"
-                    if turn["goal"] in CHAT_GOAL_LIST:
-                        data_jl.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'REC','dial_history': out_mess, 'response': turn["message"]})
+                    out_mess = dial_history + "[recommendation item]:"
+                    if guidance == 'None':
+                        output_data.append({'dial-turn_id': f"{dial_id}-{ti}",'task': 'REC','Input': out_mess, 'Output': Item})
+                    elif guidance == 'GOAL':
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'REC', 'guidance': 'GOAL','Input': out_mess, 'guide_message': f"[goal]:{turn['goal']}", 'Output': Item})
+                    elif guidance == 'TOPIC':
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'REC', 'guidance': 'TOPIC','Input': out_mess, 'guide_message': f"[topic]:{turn['topic']}", 'Output': Item})
+                    elif guidance == 'KNOWLEDGE':
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'REC', 'guidance': 'KNOWLEDGE','Input': out_mess, 'guide_message': f"[knowledge]:{turn['knowledge']}", 'Output': Item})  
+                    
                 mess = "[system]:" + turn["message"] + "\n"
                 dial_history += mess
 
-    return data_jl
+    return output_data
 
-def task4(data_j):
+def task4(input_data):
     #Name: TOPIC
     #convert the data into differen task format
     #task four: generate topic response
     #input: dialogue history
     #output: topic
-    data_jl = []
-    for dial_id, dialogue in data_j.items():
+    output_data = []
+    for dial_id, dialogue in input_data.items():
         dial_history = ''
         for ti, turn in enumerate(dialogue['messages']):
             if ti == 0 and turn["role"] == "Recommender":
@@ -133,23 +159,23 @@ def task4(data_j):
                 mess = "[user]:" + turn["message"] + "\n"
                 dial_history += mess
             elif turn["role"] == 'Recommender':
-                if turn["topic"] != []:
+                if turn["topic"] != [] and turn["topic"] != ["None"]:
                     out_mess = dial_history + "[topic]:"
-                    data_jl.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'TOPIC','dial_history': out_mess, 'response': turn["message"]})
+                    output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'TOPIC','Input': out_mess, 'Output': turn["topic"]})
                 mess = "[system]:" + turn["message"] + "\n"
                 dial_history += mess
 
-    return data_jl
+    return output_data
 
 
-def task5(data_j):
+def task5(input_data):
     #Name: GOAL
     #convert the data into differen task format
     #task five: generate goal response
     #input: dialogue history
     #output: goal
-    data_jl = []
-    for dial_id, dialogue in data_j.items():
+    output_data = []
+    for dial_id, dialogue in input_data.items():
         dial_history = ''
         for ti, turn in enumerate(dialogue['messages']):
             if ti == 0 and turn["role"] == "Recommender":
@@ -161,118 +187,192 @@ def task5(data_j):
             elif turn["role"] == 'Recommender':
                 if turn["goal"] != []:
                     out_mess = dial_history + "[goal]:"
-                    data_jl.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'GOAL','dial_history': out_mess, 'response': turn["message"]})
+                    output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'GOAL','Input': out_mess, 'Output': turn["goal"]})
                 mess = "[system]:" + turn["message"] + "\n"
                 dial_history += mess
 
-    return data_jl
+    return output_data
 
 
-def knowledge_to_question(knowledge, KG_pool):
-    #check if the knowledge is already in KG_pool
-    # if not generate proper question to test for the knowledge grounding
-    #input: knowledge and KG_pool
-    #output: boolean and the question, and answers [all in list format]
-    KG = False
-    out_mess = "There is no knowledge in this turn"
-    result = "NO results"
 
-    return KG, out_mess, result
-
-
-def task6(data_j):
+def task6(input_data):
     #Name: KNOWLEDGE
     #convert the data into differen task format
     #task six: generate knowledge response
     #input: question about the knowledge, node predicction or edge prediction
     #output: entity level node prediction or edge prediction
-    data_jl = []
+    output_data = []
     KG_pool = {}
-    for dial_id, dialogue in data_j.items():
+    unique_knowledge = []
+    for dial_id, dialogue in input_data.items():
         
         for ti, turn in enumerate(dialogue['messages']):
             if turn["knowledge"] != []:
+                if turn["knowledge"] not in unique_knowledge:
+                    unique_knowledge.append(turn["knowledge"])
+                else:
+                    continue
                 #check whehter it may contain multiple knowledge
-                KG, out_mess, result = knowledge_to_question(turn["knowledge"], KG_pool)
+                #get knowledge triple from the data
+                A = turn["knowledge"][0]
+                R = turn["knowledge"][1]
+                B = turn["knowledge"][2]
+                Question = Question_for_relation(A, R)
+                output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'KNOWLEDGE','Input': Question, 'Output': B})
+    return output_data
 
-                if KG:
-                    data_jl.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'KNOWLEDGE','dial_history': out_mess, 'response': result})
-    return data_jl
-
-def json_to_jsonl(json_file, jsonl_file, purpose = 'task1'):
-    with open(json_file, "r") as f:
-        data_j = json.load(f)
-    if purpose == 'CRS':  #task1
-        data_jl = task1(data_j)
-    elif purpose == 'CHAT': #task2
-        data_jl = task2(data_j)
-    elif purpose == 'REC': #task3
-        data_jl = task3(data_j)
-    elif purpose == 'TOPIC': #task4
-        data_jl = task4(data_j)
-    elif purpose == 'GOAL': #task5
-        data_jl = task5(data_j)
-    elif purpose == 'KNOWLEDGE': #task6
-        data_jl = task6(data_j)
+def read_data(input_file, output_file, args):
+    guidance_dic = {
+        "DuRecDial_ENGLISH": ["REC", "TOPIC", "GOAL", "KNOWLEDGE", "ALL"],
+        "DuRecDial_CHINESE": ["REC", "TOPIC", "GOAL", "KNOWLEDGE", "ALL"],
+        "TG-Redial_CHINESE": ["REC", "TOPIC", "GOAL", "ALL"]
+    }
+    chat_dic = {
+        "DuRecDial_ENGLISH": ['chat', 'chatting', 'chitchat', 'chitchatting', 'talk', 'talking', 'free talk', 'free talking', 'free chat', 'free chatting'],
+        "TG-Redial_CHINESE": [ 'Say goodbye','再见' ,  'Greetings','寒暄', "Ask about user's name",'问 User 姓名', "Ask about user's gender",  '问 User 性别', "Ask about user's age", '问 User 年龄',"Ask about user's hobbies", '问 User 爱好',  'Ask about date' ,'问 日期',  'Ask about time','问 时间',  'Ask about weather','问 天气',   'Music on demand','音乐 点播',  'Play music','播放 音乐',    'Weather notification','天气 信息 推送']
+    }
+    task_name = args.task
+    with open(input_file, "r") as f:
+        input_data = json.load(f)
+    if task_name == 'CRS':  #task1
+        if args.with_guidance and args.guidance in task_dic[args.dataset_name]:
+            output_data = task1(input_data, args.guidance)
+        else:
+            output_data = task1(input_data)
+    elif task_name == 'CHAT': #task2
+        output_data = task2(input_data, chat_dic[args.dataset_name])
+    elif task_name == 'REC': #task3
+        if args.with_guidance and args.guidance in task_dic[args.dataset_name] and args.guidance != 'ALL' and args.guidance != 'REC':
+            output_data = task3(input_data, args.dataset_name, args.guidance, )
+        else:
+            output_data = task3(input_data, args.dataset_name)
+    elif task_name == 'TOPIC': #task4
+        output_data = task4(input_data)
+    elif task_name == 'GOAL': #task5
+        output_data = task5(input_data)
+    elif task_name == 'KNOWLEDGE': #task6
+        output_data = task6(input_data)
     else:
         print("You defined task is not in the provided list")
         raise Exception("Sorry, you have to check you task before running thi function")
 
-    with open(jsonl_file, "w") as f:
-        for line in data_jl:
-            json.dump(line, f)
-            f.write('\n')
+    with open(output_file, "w") as f:
+        json.dump(output_data, f, indent=4)
 
-    return data_jl
+    return output_data
 
 
-def prepare_test_data(task, data_d):
+def prepare_test_data(args):
     data_output = []
     # detailed tasks for each dataset
     # need to revised later
     task_dic = {
         "DuRecDial_ENGLISH": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
         "DuRecDial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
-        "OpenKnowKG": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
-        "ReDial": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
-        "TG-Redial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"]
+        "TG-Redial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"]
     }
-    if data_d == "DuRecDial_ENGLISH":
+    logger.info("Dataset is not previously save, creating data for evaluation...") 
+        # "OpenKnowKG": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
+        # "ReDial": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
+    if args.dataset_name == "DuRecDial_ENGLISH":
         data_path = os.path.join('data_p/durecdial', 'du_en_test.json')
-    elif data_d == "DuRecDial_CHINESE":
+    elif args.dataset_name == "DuRecDial_CHINESE":
         data_path = os.path.join('data_p/durecdial', 'du_zh_test.json')
-    elif data_d == "TG-Redial_CHINESE":
+    elif args.dataset_name == "TG-Redial_CHINESE":
         data_path = os.path.join('data_p/tgredial', 'tg_test.json')
-    elif data_d == "OpenKnowKG":
-        data_path = os.path.join('data_p/opendialkg', 'opendialkg.json')
-    elif data_d == "ReDial":
-        data_path = os.path.join('data_p/redial', 're_test.json')
+    # elif args.dataset_name == "OpenKnowKG":
+    #     data_path = os.path.join('data_p/opendialkg', 'opendialkg.json')
+    # elif args.dataset_name == "ReDial":
+    #     data_path = os.path.join('data_p/redial', 're_test.json')
     else: 
+        
         print("+++++++++++++++++++++++++++++++++++++++++++++")
         print("You defined data is not in the provided list")
         print("+++++++++++++++++++++++++++++++++++++++++++++")
-        raise Exception("Sorry, you have to check you data before running thi function")
+        raise Exception("Sorry, you have to check you data before running this function")
     
 
-    avail_task = list(set(task_dic[data_d]) & set(task))
+    avail_task = task_dic[args.dataset_name]
     print("Step 1 for loading data and task:+++++++++++++++++++++++++++++++++")
-    print("You proposed dataset is: ", data_d)
-    print("You proposed task is: ", task)
+    print("You proposed dataset is: ", args.dataset_name)
     print("The available task for this dataset is: ", avail_task)
+    print("You proposed task is: ", args.task)
+    if args.task not in avail_task:
+        raise Exception("Sorry, you have to check you task in the provided task list")
     if not os.path.exists('data_test'):
         os.makedirs('data_test')
-    for task_i in avail_task:
-        out_file = os.path.join('data_test', data_d + '_' + task_i + '.jsonl')
-        data_jl = json_to_jsonl(data_path, out_file, task_i)
+    if (args.task == 'CRS' or args.task == 'REC') and args.with_guidance:
+        out_path = os.path.join('data_test', args.dataset_name + '_' + args.task + '_' + args.guidance + '.json') 
+    else:  
+        out_path = os.path.join('data_test', args.dataset_name + '_' + args.task + '.json')
+    eval_data = read_data(data_path, out_path, args)
 
-        data_output.append(data_jl)
-    return data_output
+    return eval_data
+
+
+
+def prepare_demo_data(args):  
+    data_output = []
+    # detailed tasks for each dataset
+    # need to revised later
+    task_dic = {
+        "DuRecDial_ENGLISH": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"],
+        "DuRecDial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"],
+        "TG-Redial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"]
+    }
+    logger.info("Dataset is not previously save, creating data for evaluation...") 
+        # "OpenKnowKG": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
+        # "ReDial": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
+    if args.dataset_name == "DuRecDial_ENGLISH":
+        data_path = os.path.join('instructions', 'Du_en_demo.json')
+    elif args.dataset_name == "DuRecDial_CHINESE":
+        data_path = os.path.join('data_p/durecdial', 'du_zh_test.json')
+    elif args.dataset_name == "TG-Redial_CHINESE":
+        data_path = os.path.join('data_p/tgredial', 'tg_test.json')
+    # elif args.dataset_name == "OpenKnowKG":
+    #     data_path = os.path.join('data_p/opendialkg', 'opendialkg.json')
+    # elif args.dataset_name == "ReDial":
+    #     data_path = os.path.join('data_p/redial', 're_test.json')
+    else: 
         
+        print("+++++++++++++++++++++++++++++++++++++++++++++")
+        print("You defined data is not in the provided list")
+        print("+++++++++++++++++++++++++++++++++++++++++++++")
+        raise Exception("Sorry, you have to check you data before running this function")
+    
+
+    avail_task = task_dic[args.dataset_name]
+    print("Step 1 for loading data and task:+++++++++++++++++++++++++++++++++")
+    print("You proposed dataset is: ", args.dataset_name)
+    print("The available task for this dataset is: ", avail_task)
+    print("You proposed task is: ", args.task)
+    if args.task not in avail_task:
+        raise Exception("Sorry, you have to check you task in the provided task list")
+    if not os.path.exists('data_test'):
+        os.makedirs('data_test')
+    if (args.task == 'CRS' or args.task == 'REC') and args.with_guidance:
+        out_path = os.path.join('instructions/demo', args.dataset_name + '_' + args.task + '_' + args.guidance + '.json') 
+    else:  
+        out_path = os.path.join('instructions/demo', args.dataset_name + '_' + args.task + '.json')
+    eval_data = read_data(data_path, out_path, args)
+
+    return eval_data    
 
 if __name__ == "__main__":
     #data_d = "DuRecDial_ENGLISH"
     #data_d = "DuRecDial_CHINESE"
     #data_d = "TG-Redial_CHINESE"
-    data_d = "OpenKnowKG"
-    task = ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"]
-    data_output = prepare_test_data(task, data_d)
+    # data_d = "OpenKnowKG"
+    # task = ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"]
+    # data_output = prepare_test_data(task, data_d)
+    task_dic = {
+        "DuRecDial_ENGLISH": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
+        "DuRecDial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"],
+        "TG-Redial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"]
+    }
+    from config import get_args
+    args = get_args()
+    args.dataset_name = "DuRecDial_ENGLISH"
+    for task in task_dic[args.dataset_name]:
+        args.task = task
+        data_output = prepare_test_data(args)

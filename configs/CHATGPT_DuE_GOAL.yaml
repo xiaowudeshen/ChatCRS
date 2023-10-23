@@ -1,0 +1,10 @@
+---
+prompt_file: instructions/template_goal.json
+eval_file: data_test/DuRecDial_ENGLISH_GOAL.json
+dataset_name: DuRecDial_ENGLISH
+task: GOAL
+shot: 1
+tag: test
+model: CHATGPT
+temperature: 1.0
+top_p: 0.95
