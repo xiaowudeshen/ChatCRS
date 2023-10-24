@@ -18,4 +18,4 @@ python ChatCRS.py --config configs/CHATGPT_DuE_GOAL.yaml  --openai_api_key sk-ii
 
 python ChatCRS.py --config configs/CHATGPT_DuE_REC.yaml  --openai_api_key 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 --quick_test 5 
 
-python ChatCRS.py --config configs/LLAMA_DuE_CRS.yaml  --openai_api_key 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 --quick_test 5
+python ChatCRS.py --config configs/LLAMA_DuE_CRS.yaml  --quick_test 5 --huggingface_key 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
