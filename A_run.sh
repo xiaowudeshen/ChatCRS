@@ -1,11 +1,12 @@
 #!/bin/bash
-#PBS -N LLAMA2_normal
+#PBS -N LLAMA2_full_CRS
 #PBS -l select=1:ncpus=16:ngpus=1:mem=100gb
-#PBS -l walltime=10:00:00
+#PBS -l walltime=20:00:00
 #PBS -j oe
-#PBS -P 11003552
+#PBS -P personal-e0134107
 #PBS -q ai
-#PBS -o log/LLAMA2-normal.log
+#PBS -o log/LLAMA2-normal-crs.log
+
 
 # The following environment variables will be preset after your job is submitted and started.
 ################################################# 
@@ -29,4 +30,14 @@ cd $PBS_O_WORKDIR
 
 nvidia-smi
 
-python ChatCRS.py --config configs/LLAMA2_DuE_CRS.yaml  --huggingface_key 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 --quick_test 5
+python ChatCRS.py --config configs/CHATCRS_DuE_CRS.yaml  --model LLAMA2 --huggingface_key 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
+
+# python ChatCRS.py --config configs/CHATCRS_DuE_CHAT.yaml  --model LLAMA2 --huggingface_key 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
+
+# python ChatCRS.py --config configs/CHATCRS_DuE_GOAL.yaml  --model LLAMA2 --huggingface_key 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
+
+# python ChatCRS.py --config configs/CHATCRS_DuE_TOPIC.yaml  --model LLAMA2 --huggingface_key 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
+
+# python ChatCRS.py --config configs/CHATCRS_DuE_KNOWLEDGE.yaml  --model LLAMA2 --huggingface_key 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
+
+# python ChatCRS.py --config configs/CHATCRS_DuE_REC.yaml  --model LLAMA2 --huggingface_key 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

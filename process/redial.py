@@ -120,7 +120,7 @@ class Redial():
 
 
 if __name__ == "__main__":
-    datafolder_path = "../redial"
+    datafolder_path = "../../redial"
     redial = Redial(datafolder_path)
 
 

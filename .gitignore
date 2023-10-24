@@ -19,7 +19,7 @@
 /result/
 #log file
 *.out
-
+*.slurm
 
 # Common credential files
 **/credentials.json

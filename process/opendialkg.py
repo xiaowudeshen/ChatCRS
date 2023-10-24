@@ -101,5 +101,5 @@ class Opendialkg():
 
 if __name__ == "__main__":
 
-    datafolder_path = "../opendialkg/data"
+    datafolder_path = "../../opendialkg/data"
     tgredial = Opendialkg(datafolder_path)
