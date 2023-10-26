@@ -1,11 +1,9 @@
 #date Oct, 2023
 #author: Victor Li
-'''
-This file is used to evaluate the performance of the model.
-Different evaluation metrics are saved in this file.
-Scripts for creating human evaluation are also saved. 
-'''
-
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 import re
 import os
 import json
@@ -16,7 +14,26 @@ import torch
 import torch.nn.functional as F
 from sklearn import metrics
 import jieba
+import string
 import re
+from config import get_args
+
+def normalize_answer(s):
+    def remove_articles(text):
+        return re.sub(r"\b(a|an|the)\b", " ", text)
+
+    def white_space_fix(text):
+        return " ".join(text.split())
+
+    def remove_punc(text):
+        exclude = set(string.punctuation)
+        return "".join(ch for ch in text if ch not in exclude)
+
+    def lower(text):
+        return text.lower()
+
+    return white_space_fix(remove_articles(remove_punc(lower(s))))
+
 
 def f1_score(preds, refs):
     f1s = []
@@ -71,7 +88,7 @@ def perplexity(logits, targets, weight=None, padding_idx=None, device=None):
     ppl = nll.exp()
     return ppl
 
-def know_f1_score(pred_pt, gold_pt):
+def topic_f1_score(pred_pt, gold_pt):
     ps = []
     rs = []
     f1s = []
@@ -101,20 +118,7 @@ def know_f1_score(pred_pt, gold_pt):
     return scores
 
 
-'''
-def know_hit_score(pred_pt, gold_pt):
-    hits = []
-    for pred_labels, gold_labels in zip(pred_pt, gold_pt):
-        if len(gold_labels) == 0:
-            continue
-        if len(set(pred_labels)&set(gold_labels)) > 0:
-            hits.append(1)
-        else:
-            hits.append(0)
-    hits = sum(hits)/len(hits)
-    return [hits]
-'''
-def know_hit_score(pred_pt, gold_pt):
+def topic_hit_score(pred_pt, gold_pt):
     hits1 = []
     hits3 = []
     hits5 = []
@@ -138,46 +142,47 @@ def know_hit_score(pred_pt, gold_pt):
     hits5 = sum(hits5)/len(hits5)
     return [hits1, hits3, hits5]
 
-def goal_f1_score(pred_pt, gold_pt, data_name):
-    goal_dict = {}
-    with open('../data/{}/goal2id.txt'.format(data_name),'r',encoding='utf-8') as infile:
-        for line in infile:
-            items = line.strip().lower().split('\t')
-            goal_dict[items[0]] = items[1]
+def goal_f1_score(pred_pt, gold_pt, args):
+    # goal_dict = {}
+    # with open('../data/{}/goal2id.txt'.format(args.dataset_name),'r',encoding='utf-8') as infile:
+    #     for line in infile:
+    #         items = line.strip().lower().split('\t')
+    #         goal_dict[items[0]] = items[1]
 
-    def make_label(l, label_dict):
-        length = len(label_dict)
-        result = [0] * length
-        for label in l:
-            if label.strip().lower() == '':
-                continue
-            label = ''.join(label.strip().lower().split(' '))
-            if label not in label_dict:
-                continue
-            result[int(label_dict[label])] = 1
-        return result
+    # def make_label(l, label_dict):
+    #     length = len(label_dict)
+    #     result = [0] * length
+    #     for label in l:
+    #         if label.strip().lower() == '':
+    #             continue
+    #         label = ''.join(label.strip().lower().split(' '))
+    #         if label not in label_dict:
+    #             continue
+    #         result[int(label_dict[label])] = 1
+    #     return result
     
-    def get_metrics(y, y_pre, data_name):
-        if data_name == 'durecdial':
+    def get_metrics(y, y_pre, args):
+        if args.dataset_name == 'DuRecDial_ENGLISH':
             macro_f1 = metrics.f1_score(y, y_pre, average='macro')
             macro_precision = metrics.precision_score(y, y_pre, average='macro')
             macro_recall = metrics.recall_score(y, y_pre, average='macro')
-        else:
-            f1 = metrics.f1_score(y, y_pre, average=None).tolist()
-            p = metrics.precision_score(y, y_pre, average=None).tolist()
-            r = metrics.recall_score(y, y_pre, average=None).tolist()
-            print(f1.count(0), p.count(0), r.count(0))
-            macro_f1 = sum(f1)/(len(f1)-f1.count(0))
-            macro_precision = sum(p)/(len(p)-p.count(0))
-            macro_recall = sum(r)/(len(r)-r.count(0))
-        return macro_precision, macro_recall, macro_f1
-    if data_name == 'tgredial':
-        reference = np.array([make_label(y, goal_dict) for y in gold_pt])
-        candidate = np.array([make_label(y_pre, goal_dict) for y_pre in pred_pt])
-    else:
-        reference = gold_pt
-        candidate = pred_pt
-    all_scores = list(get_metrics(reference, candidate, data_name))
+        # else:
+        #     f1 = metrics.f1_score(y, y_pre, average=None).tolist()
+        #     p = metrics.precision_score(y, y_pre, average=None).tolist()
+        #     r = metrics.recall_score(y, y_pre, average=None).tolist()
+        #     print(f1.count(0), p.count(0), r.count(0))
+        #     macro_f1 = sum(f1)/(len(f1)-f1.count(0))
+        #     macro_precision = sum(p)/(len(p)-p.count(0))
+        #     macro_recall = sum(r)/(len(r)-r.count(0))
+        # return macro_precision, macro_recall, macro_f1
+
+    # if args.dataset_name == 'tgredial':
+    #     reference = np.array([make_label(y, goal_dict) for y in gold_pt])
+    #     candidate = np.array([make_label(y_pre, goal_dict) for y_pre in pred_pt])
+    # else:
+    reference = gold_pt
+    candidate = pred_pt
+    all_scores = list(get_metrics(reference, candidate, args.dataset_name))
 
     return all_scores
 
@@ -246,106 +251,137 @@ def tgredial_bleu(tokenized_gen, tokenized_tar):
 
     return bleu_sum / count, bleu1_sum / count, bleu2_sum / count
 
-def calculate(raw_pred, raw_ref, data_name, task):
-    print('Dataset: ', data_name, 'Task: ', task, '-----------------')
-    if task in ['resp','direct']:
-        if data_name == 'durecdial':
-            refs = [ref.split(' ') for ref in raw_ref]
-            preds = [pred.split(' ') for pred in raw_pred]
+
+
+def automatic_evaluation(args, path_to_data):
+    task_dic = {
+        "DuRecDial_ENGLISH": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
+        "DuRecDial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"],
+        "TG-Redial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"]
+    }
+    for key in task_dic:
+        
+        if key in path_to_data:
+            args.dataset_name = key
+            break
+    for task in task_dic[args.dataset_name]:
+        if f"-{task}-" in path_to_data:
+            args.task = task
+            break   
+    logger.info(f"#Running evaluatin for dataset: {args.dataset_name} and task: {args.task}")
+    with open(path_to_data, 'r', encoding='utf-8') as infile:
+        data = json.load(infile)
+    A_golds = []
+    A_preds = []
+    for d in data["data"]:
+        if type(d["Output"]) is list:
+            A_golds.append([normalize_answer(item) for item in d["Output"]])
         else:
-            refs = []
-            for ref in raw_ref:
-                new_ref = []
-                ref = re.sub(r'《(.*)》', '<movie>', ''.join(ref.split(' ')))
-                ref_split_by_movie = list(ref.split('<movie>'))
-                for i, sen_split in enumerate(ref_split_by_movie):
-                    for segment in jieba.cut(sen_split):
-                        new_ref.append(segment)
-                    if i != len(ref_split_by_movie) - 1:
-                        new_ref.append('<movie>')
-                refs.append(new_ref)
-            preds = []
-            for pred in raw_pred:
-                new_pred = []
-                pred = re.sub(r'《(.*)》', '<movie>', ''.join(pred.split(' ')))
-                pred_split_by_movie = list(pred.split('<movie>'))
-                for i, sen_split in enumerate(pred_split_by_movie):
-                    for segment in jieba.cut(sen_split):
-                        new_pred.append(segment)
-                    if i != len(pred_split_by_movie) - 1:
-                        new_pred.append('<movie>')
-                preds.append(new_pred)
-    
-        #run bleu
-        bleu_preds = preds
-        if data_name == 'durecdial': 
-            bleu_refs = [[ref] for ref in refs]
+            A_golds.append(normalize_answer(d["Output"]))
+        if type(d["output"]) is list:
+            A_preds.append([normalize_answer(item) for item in d["output"]])
+        else:
+            A_preds.append(normalize_answer(d["output"]))
+    # A_preds = A_golds.copy()
+    if args.dataset_name == 'DuRecDial_ENGLISH':
+        if args.task in ['CRS', 'CHAT']:
+            #running result for F1, blue, distinct
+            #run bleu
+            bleu_preds = A_preds
+            bleu_refs = [[gold] for gold in A_golds]
             bleu_score = corpus_bleu(bleu_refs, bleu_preds)
             bleu1 = corpus_bleu(bleu_refs, bleu_preds, weights=(1, 0, 0, 0))
             bleu2 = corpus_bleu(bleu_refs, bleu_preds, weights=(0.5, 0.5, 0, 0))
-        else:
-            bleu_refs = refs
-            bleu_score, bleu1, bleu2 = tgredial_bleu(bleu_refs, bleu_preds)
-        bleu_scores = [bleu_score, bleu1, bleu2]
-        print('Running BLEU for ' + ' ' + data_name + '-----------------------------')
-        print('BLEU: ', bleu_scores)
-        
-        dist_scores = list(distinct(preds))
-        print('Running Dist for ' + ' ' + data_name + '-----------------------------')
-        print('Dist: ', dist_scores)
+            
+            bleu_scores = [bleu_score, bleu1, bleu2]
+            print('Running BLEU for ' + ' ' + args.dataset_name + '-----------------------------')
+            print('BLEU: ', bleu_scores)
+            
+            dist_scores = list(distinct(A_preds))
+            print('Running Dist for ' + ' ' + args.dataset_name + '-----------------------------')
+            print('Dist: ', dist_scores)
 
-        f1_scores = [f1_score(preds, refs)]
-        print('Running F1 for ' + ' ' + data_name + '-----------------------------')
-        print('F1: ', f1_scores)
+            f1_scores = [f1_score(A_preds, A_golds)]
+            print('Running F1 for ' + ' ' + args.dataset_name + '-----------------------------')
+            print('F1: ', f1_scores)
 
-        auto_scores = bleu_scores + dist_scores + f1_scores 
-    elif task == 'know':
-        refs = [ref.split(' | ') for ref in raw_ref]
-        preds = [pred.split(' | ') for pred in raw_pred]
-        hit_scores = know_hit_score(preds, refs)
-        f1_scores = know_f1_score(preds, refs)
-        print('Running P/R/F1 for ' + ' ' + data_name + '-----------------------------')
-        print('P/R/F1/hits: ', f1_scores, hit_scores)
-        auto_scores = f1_scores + hit_scores
-    elif task == 'goal':
-        if data_name == 'durecdial':
-            refs = raw_ref
-            preds = raw_pred
-        else:
-            refs = [ref.split(' | ') for ref in raw_ref]
-            preds = [pred.split(' | ') for pred in raw_pred]
-        f1_scores = goal_f1_score(preds, refs, data_name)
-        print('Running P/R/F1 for ' + ' ' + data_name + '-----------------------------')
-        print('P/R/F1: ', f1_scores)
-        auto_scores = f1_scores
-    elif task == 'item':
-        if type(raw_pred[0]) is not list: 
-            preds = [eval(pred) for pred in raw_pred]
-        else:
-            preds = raw_pred.copy()
-        if type(raw_ref[0]) is not list: 
-            refs = [eval(ref) for ref in raw_ref]
-        else:
-            refs = raw_ref.copy()
-        ndcg_scores = ndcg_score(preds, refs)
-        mrr_scores = mrr_score(preds, refs)
-        print('Running NDCG and MRR for ' + ' ' + data_name + '-----------------------------')
-        print('NDCG@10/NDCG@50/MRR@10/MRR@50: ', ndcg_scores, mrr_scores)
-        auto_scores = ndcg_scores + mrr_scores
+            auto_scores = bleu_scores + dist_scores + f1_scores 
+        elif task == 'TOPIC':
+            refs = A_golds
+            if A_preds is not list:
+                preds = [pred for pred in A_preds] #if pred is one item
+            else:
+                preds = A_preds # if prd is a list
+            hit_scores = topic_hit_score(preds, refs)
+            f1_scores = topic_f1_score(preds, refs)
+            print('Running P/R/F1 for ' + ' ' + args.dataset_name + '-----------------------------')
+            print('P/R/F1/hits: ', f1_scores, hit_scores)
+            auto_scores = f1_scores + hit_scores
+        elif task == 'GOAL':
+            if args.guidance is None:
+                #take goal prediction as generation task same as topic prediction
+                refs = A_golds
+                if A_preds is not list:
+                    preds = [pred for pred in A_preds] #if pred is one item
+                else:
+                    preds = A_preds # if prd is a list
+                hit_scores = topic_hit_score(preds, refs)
+                f1_scores = topic_f1_score(preds, refs)
+                print('Running P/R/F1 for ' + ' ' + args.dataset_name + '-----------------------------')
+                print('P/R/F1/hits: ', f1_scores, hit_scores)
+                auto_scores = f1_scores + hit_scores
+            elif args.guidance == 'GOALLIST':
+                refs = A_golds
+                preds = A_preds
+                f1_scores = goal_f1_score(preds, refs, args)
+                print('Running P/R/F1 for ' + ' ' + args.dataset_name + '-----------------------------')
+                print('P/R/F1: ', f1_scores)
+                auto_scores = f1_scores
+        elif task == 'KNOWLEDGE':
+            #take knowledge prediction as generation task same as topic prediction
+            refs = A_golds
+            if A_preds is not list:
+                preds = [pred for pred in A_preds] #if pred is one item
+            else:
+                preds = A_preds # if prd is a list
+            hit_scores = topic_hit_score(preds, refs)
+            # f1_scores = topic_f1_score(preds, refs)
+            f1_scores = [f1_score(A_preds, A_golds)]
+            print('Running P/R/F1 for ' + ' ' + args.dataset_name + '-----------------------------')
+            print('P/R/F1/hits: ', f1_scores, hit_scores)
+            
+            # print('Running F1 for ' + ' ' + args.dataset_name + '-----------------------------')
+            # print('F1: ', f1_scores)
+            auto_scores = f1_scores + hit_scores
+            
+        elif task == 'REC':
+            # breakpoint()
+            if type(A_preds[0]) is not list: 
+                preds = [pred for pred in A_preds]
+            else:
+                preds = A_preds.copy()
+            if type(A_golds[0]) is not list: 
+                refs = [ref for ref in A_golds]
+            else:
+                refs = A_golds.copy()
+            ndcg_scores = ndcg_score(preds, refs)
+            mrr_scores = mrr_score(preds, refs)
+            print('Running NDCG and MRR for ' + ' ' + args.dataset_name + '-----------------------------')
+            print('NDCG@10/NDCG@50/MRR@10/MRR@50: ', ndcg_scores, mrr_scores)
+            auto_scores = ndcg_scores + mrr_scores
 
     return auto_scores
-
+        
+    
 
 
 if __name__ == '__main__':
-    data = 'tgredial'
-    task = 'know'
-    pred = []
-    with open('output/{}/{}/{}_{}.pipeline'.format(data,task,data,task), 'r', encoding='utf-8') as infile:
-        for line in infile:
-            pred.append(line.lower().strip())
-    ref = []
-    with open('output/{}/{}/{}_{}.reference'.format(data,task,data,task), 'r', encoding='utf-8') as infile:
-        for line in infile:
-            ref.append(line.lower().strip())
-    auto_metric = calculate(pred, ref, data, task)
+    file_dir = 'result'
+    file_path = 'DuRecDial_ENGLISH-CHATGPT-CHAT-None-shot1-42-quick_test5.json'
+    file_path = 'DuRecDial_ENGLISH-CHATGPT-TOPIC-None-shot1-42-quick_test5.json'
+    file_path = 'DuRecDial_ENGLISH-CHATGPT-GOAL-None-shot1-42-quick_test5.json'
+    # file_path = 'DuRecDial_ENGLISH-CHATGPT-KNOWLEDGE-None-shot1-42-quick_test5.json'
+    file_path = 'DuRecDial_ENGLISH-CHATGPT-REC-None-shot1-42-quick_test5.json'
+    file_name = os.path.join(file_dir, file_path)
+    args = get_args()
+    automatic_evaluation(args, file_name)

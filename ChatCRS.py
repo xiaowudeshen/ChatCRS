@@ -87,8 +87,8 @@ def main():
             eval_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
             instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], test= True
         )
-    
-    logger.info("Ready to run the experiment, total number of testing smaples:", len(eval_data))
+    breakpoint()
+    logger.info("Ready to run the experiment, total number of testing smaples:%d", len(eval_data))
 
     #run evaluation
     for idx, item in enumerate(tqdm(eval_data)):
@@ -189,7 +189,7 @@ def main():
     model_name = args.model
     if "/" in model_name:
         model_name = model_name.split("/")[-1]
-    name = f"{args.dataset_name}-{model_name}-{args.task}-{args.guidance}-shot{args.shot}-{args.seed}"
+    name = f"{args.dataset_name}-{model_name}-{args.task}-gui{args.guidance}-shot{args.shot}-{args.seed}"
     
     if args.quick_test is not None:
         name += f"-quick_test{args.quick_test}"
