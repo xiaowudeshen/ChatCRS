@@ -32,21 +32,21 @@ def task1(input_data, guidance = 'None'):
                 out_mess = dial_history + "[system]:"
                 if guidance == 'None':
                     output_data.append({'dial-turn_id': f"{dial_id}-{ti}",'task': 'CRS','Input': out_mess, 'Output': turn["message"]})
-                elif guidance in task_dic[dataset_name]:
+                else:
                     if guidance == 'GOAL':
-                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'GOAL','Input': out_mess, 'guide_message': f"[goal]:{turn['goal']}", 'Output': turn["message"]})
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'GOAL','Input': out_mess, 'guide_message': f"{turn['goal']}", 'Output': turn["message"]})
                         # out_mess = dial_history + f"[goal]:{turn['goal']}\n[system]:"
                     elif guidance == 'TOPIC':
-                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'TOPIC','Input': out_mess, 'guide_message': f"[topic]:{turn['topic']}", 'Output': turn["message"]})
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'TOPIC','Input': out_mess, 'guide_message': f"{turn['topic']}", 'Output': turn["message"]})
                         # out_mess = dial_history + f"[topic]:{turn['topic']}\n[system]:"
                     elif guidance == 'KNOWLEDGE':
                         # out_mess = dial_history + f"[knowledge]:{turn['knowledge']}\n[system]:"
-                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'KNOWLEDGE','Input': out_mess, 'guide_message': f"[knowledge]:{turn['knowledge']}", 'Output': turn["message"]})
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'KNOWLEDGE','Input': out_mess, 'guide_message': f"{turn['knowledge']}", 'Output': turn["message"]})
                     elif guidance == "REC":
-                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'REC','Input': out_mess, 'guide_message': f"[recommnedation]:{turn['REC']}", 'Output': turn["message"]})
-                    elif guidance == "all":
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'REC','Input': out_mess, 'guide_message': f"{turn['mention']}", 'Output': turn["message"]})
+                    elif guidance == "ALL":
                         # out_mess = dial_history + f"[goal]:{turn['goal']} [topic]:{turn['topic']}\n[system]:"
-                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'ALL','Input': out_mess, 'guide_message': f"[goal]:{turn['goal']}\n [topic]:{turn['topic']}\n [recommnedation]:{turn['REC']}\n [knowledge]:{turn['knowledge']}", 'Output': turn["message"]})
+                        output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'CRS', 'guidance': 'ALL','Input': out_mess, 'guide_message': f"[GOAL]:{turn['goal']}\n [TOPIC]:{turn['topic']}\n [RECOMMENDATION]:{turn['REC']}\n [KNOWLEDGE]:{turn['knowledge']}", 'Output': turn["message"]})
                 
                 mess = "[system]:" + turn["message"] + "\n"
                 dial_history += mess
@@ -127,7 +127,7 @@ def task3(input_data,  dataset, guidance = 'None'):
             elif turn["role"] == 'Recommender':
                 Rec, Item = check_recommendation(turn, dataset)
                 if Rec:
-                    out_mess = dial_history + "[recommendation item]:"
+                    out_mess = dial_history
                     if guidance == 'None':
                         output_data.append({'dial-turn_id': f"{dial_id}-{ti}",'task': 'REC','Input': out_mess, 'Output': Item})
                     elif guidance == 'GOAL':
@@ -160,7 +160,7 @@ def task4(input_data):
                 dial_history += mess
             elif turn["role"] == 'Recommender':
                 if turn["topic"] != [] and turn["topic"] != ["None"]:
-                    out_mess = dial_history + "[topic]:"
+                    out_mess = dial_history
                     output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'TOPIC','Input': out_mess, 'Output': turn["topic"]})
                 mess = "[system]:" + turn["message"] + "\n"
                 dial_history += mess
@@ -186,7 +186,7 @@ def task5(input_data):
                 dial_history += mess
             elif turn["role"] == 'Recommender':
                 if turn["goal"] != []:
-                    out_mess = dial_history + "[goal]:"
+                    out_mess = dial_history
                     output_data.append({'dial/turn_id': f"{dial_id}-{ti}",'task': 'GOAL','Input': out_mess, 'Output': turn["goal"]})
                 mess = "[system]:" + turn["message"] + "\n"
                 dial_history += mess
@@ -373,6 +373,12 @@ if __name__ == "__main__":
     from config import get_args
     args = get_args()
     args.dataset_name = "DuRecDial_ENGLISH"
-    for task in task_dic[args.dataset_name]:
-        args.task = task
-        data_output = prepare_test_data(args)
+    args.with_guidance = True
+
+    # for task in task_dic[args.dataset_name]:
+    #     args.task = task
+    args.task = "CRS"
+    for gui in task_dic[args.dataset_name][2:]:
+        args.guidance = gui
+        # data_output = prepare_test_data(args)
+        data_output = prepare_demo_data(args)

@@ -4,8 +4,8 @@
 #PBS -l walltime=20:00:00
 #PBS -j oe
 #PBS -P personal-e0134107
-#PBS -q ai
-#PBS -o log/LLAMA2-normal-crs.log
+#PBS -q normal
+#PBS -o log/CHATGPT-Fri-all.log
 
 
 # The following environment variables will be preset after your job is submitted and started.
@@ -30,14 +30,22 @@ cd $PBS_O_WORKDIR
 
 nvidia-smi
 
-python ChatCRS.py --config configs/CHATCRS_DuE_CRS.yaml  --model LLAMA2 --huggingface_key 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
+for task in CRS CHAT GOAL REC TOPIC KNOWLEDGE
+do 
+    python ChatCRS.py --config configs/CHATCRS_DuE_${task}.yaml  --model CHATGPT --openai_api_key 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
+done
 
-# python ChatCRS.py --config configs/CHATCRS_DuE_CHAT.yaml  --model LLAMA2 --huggingface_key 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
 
-# python ChatCRS.py --config configs/CHATCRS_DuE_GOAL.yaml  --model LLAMA2 --huggingface_key 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
+# python ChatCRS.py --config configs/CHATCRS_DuE_CRS.yaml  --model CHATGPT --openai_api_key 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
+# python ChatCRS.py --config configs/CHATCRS_DuE_CRS_GOAL.yaml  --model CHATGPT --openai_api_key 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
+# python ChatCRS.py --config configs/CHATCRS_DuE_CRS_REC.yaml  --model CHATGPT --openai_api_key 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
+# python ChatCRS.py --config configs/CHATCRS_DuE_CRS_TOPIC.yaml  --model CHATGPT --openai_api_key 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
 
-# python ChatCRS.py --config configs/CHATCRS_DuE_TOPIC.yaml  --model LLAMA2 --huggingface_key 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
+# python ChatCRS.py --config configs/CHATCRS_DuE_GOAL.yaml  --model CHATGPT --openai_api_key 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
+# python ChatCRS.py --config configs/CHATCRS_DuE_REC.yaml  --model CHATGPT --openai_api_key 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
+# python ChatCRS.py --config configs/CHATCRS_DuE_TOPIC.yaml  --model CHATGPT --openai_api_key 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
 
-# python ChatCRS.py --config configs/CHATCRS_DuE_KNOWLEDGE.yaml  --model LLAMA2 --huggingface_key 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
-
-# python ChatCRS.py --config configs/CHATCRS_DuE_REC.yaml  --model LLAMA2 --huggingface_key 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
+# for task in GOAL TOPIC REC
+# do
+#     python ChatCRS.py --config configs/CHATCRS_DuE_CRS_${task}.yaml  --model CHATGPT --openai_api_key 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
+# done

@@ -377,11 +377,14 @@ def automatic_evaluation(args, path_to_data):
 
 if __name__ == '__main__':
     file_dir = 'result'
-    file_path = 'DuRecDial_ENGLISH-CHATGPT-CHAT-None-shot1-42-quick_test5.json'
-    file_path = 'DuRecDial_ENGLISH-CHATGPT-TOPIC-None-shot1-42-quick_test5.json'
-    file_path = 'DuRecDial_ENGLISH-CHATGPT-GOAL-None-shot1-42-quick_test5.json'
-    # file_path = 'DuRecDial_ENGLISH-CHATGPT-KNOWLEDGE-None-shot1-42-quick_test5.json'
-    file_path = 'DuRecDial_ENGLISH-CHATGPT-REC-None-shot1-42-quick_test5.json'
+    # file_path = 'DuRecDial_ENGLISH-CHATGPT-CHAT-None-shot1-42-quick_test5.json'
+    # file_path = 'DuRecDial_ENGLISH-CHATGPT-TOPIC-None-shot1-42-quick_test5.json'
+    # file_path = 'DuRecDial_ENGLISH-CHATGPT-GOAL-None-shot1-42-quick_test5.json'
+    # # file_path = 'DuRecDial_ENGLISH-CHATGPT-KNOWLEDGE-None-shot1-42-quick_test5.json'
+    # file_path = 'DuRecDial_ENGLISH-CHATGPT-REC-None-shot1-42-quick_test5.json'
+    # file_path = 'DuRecDial_ENGLISH-LLAMA2-CRS-None-shot1-42.json'
+    file_path = 'DuRecDial_ENGLISH-LLAMA2-CRS-guiGOAL-shot3-42.json'
     file_name = os.path.join(file_dir, file_path)
+    print(file_name)
     args = get_args()
     automatic_evaluation(args, file_name)

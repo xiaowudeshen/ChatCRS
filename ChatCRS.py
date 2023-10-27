@@ -14,12 +14,13 @@ import numpy as np
 import os
 from tqdm import tqdm
 
-def make_demo(item, prompt, test_prompt, instruction=None, test=False):
+def make_demo(item, prompt, test_prompt, instruction=None, guidance = None, test=False):
     # For demo prompt
     
 
     prompt = prompt.replace("{INST}", instruction).replace("{Q}", item['Input'])
-   
+    if guidance is not None:
+        prompt = prompt.replace("{G}", item["guide_message"])
 
     if not test:
         answer = "\n" + "\n".join(item["Output"]) if isinstance(item["Output"], list) else item["Output"]
@@ -36,11 +37,17 @@ def prepare_prompt_data(args, prompt_data):
     train_ids = np.random.choice(len(prompt_data["demos"]), args.shot, replace=False)
     for train_id in train_ids:
         train_item = prompt_data["demos"][train_id]
-        
-        head_prompt += make_demo(
-            train_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
-            instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], test= False
-        )
+        if args.with_guidance:
+            head_prompt += make_demo(
+                train_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
+                instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], guidance = prompt_data["guide_message"], test= False
+            )
+        else:
+
+            head_prompt += make_demo(
+                train_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
+                instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], guidance = None, test= False
+            )
         head_prompt += prompt_data["demo_sep"]
     print(head_prompt)
     return head_prompt
@@ -83,11 +90,17 @@ def main():
 
     logger.info("Generating prompts for some quick tests of the data...") 
     for idx, eval_item in enumerate(tqdm(eval_data)):
-        eval_data[idx]['prompt'] = CRS_prompt + make_demo(
-            eval_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
-            instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], test= True
-        )
-    breakpoint()
+        if args.with_guidance:
+            eval_data[idx]['prompt'] = CRS_prompt + make_demo(
+                eval_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
+                instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], guidance = prompt_data["guide_message"], test= False
+            )
+        else:
+            eval_data[idx]['prompt'] = CRS_prompt + make_demo(
+                eval_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
+                instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], guidance = None,  test= True
+            )
+    # breakpoint()
     logger.info("Ready to run the experiment, total number of testing smaples:%d", len(eval_data))
 
     #run evaluation
@@ -180,7 +193,7 @@ def main():
             logger.info(f"Final model output: {output_array[-1]}") 
         
         item['output'] = output_array if len(output_array) > 1 else output_array[0]
-        
+        # breakpoint()
     logger.info(f"#Cases when prompts exceed max length: {CRS.prompt_exceed_max_length}")
     logger.info(f"#Cases when max new tokens < 50: {CRS.fewer_than_50}")
 
@@ -200,10 +213,7 @@ def main():
         name += f"-forceciteshow"
 
     
-    eval_data = {
-        "args": args.__dict__,
-        "data": eval_data,
-    }
+    
        #Calculate price for API usage
     if args.openai_api:
         logger.info(f"Token used: prompt {CRS.prompt_tokens}; completion {CRS.completion_tokens}")
@@ -219,7 +229,12 @@ def main():
 
         logger.info(f"Unit price (Oct 16, 2023, prompt/completion): {p_price}/{c_price}")
         logger.info(f"Total cost: %.1f" % (eval_data["total_cost"]))
-
+    
+    
+    eval_data = {
+        "args": args.__dict__,
+        "data": eval_data,
+    }
     # save all to the results folder
     if not os.path.exists("result"):
         os.makedirs("result")

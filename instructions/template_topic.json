@@ -3,7 +3,7 @@
     "Task": " Your task is to predict the next topic of the conversation that the user likes given the dialogue history.",
     "Rule": " Please limit your response to the exact topics, such as a movie star or talking about the weather.",
     "demo_sep": "\n\n\n",
-    "demo_prompt": "{INST}\n\nInput: {Q}\n\nOutput: {A}",
+    "demo_prompt": "{INST}\n\nInput: {Q}\n\nTopic: {A}",
     "demos": [
         {
             "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:Yeah, it's getting colder. Please keep warm!\n[user]:OK, thanks! You are so sweet.\n[topic]:",

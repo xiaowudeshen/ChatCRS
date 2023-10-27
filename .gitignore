@@ -17,6 +17,7 @@
 /redial/
 /TGReDial/
 /result/
+/log/
 #log file
 *.out
 *.slurm

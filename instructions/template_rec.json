@@ -4,7 +4,7 @@
     "Task": " Your task is to generate a list of recommendation items that the user likes given the dialogue history.",
     "Rule": " Please limit your response to 5 items in a ranking list.",
     "demo_sep": "\n\n\n",
-    "demo_prompt": "{INST}\n\nInput: {Q}\n\nOutput: {A}",
+    "demo_prompt": "{INST}\n\nInput: {Q}\n\nRecommendations: {A}",
     "demos": [
         {
             "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[recommendation item]:",
