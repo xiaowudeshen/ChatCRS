@@ -17,6 +17,8 @@
 /redial/
 /TGReDial/
 /result/
+/result_C/
+/result_L/
 /log/
 #log file
 *.out
