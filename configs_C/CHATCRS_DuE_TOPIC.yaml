@@ -1,0 +1,9 @@
+---
+prompt_file: instructions/template_topic.json
+eval_file: data_test/DuRecDial_ENGLISH_TOPIC.json
+dataset_name: DuRecDial_ENGLISH
+task: TOPIC
+shot: 1
+tag: test
+temperature: 1.0
+top_p: 0.95

@@ -9,12 +9,14 @@ def get_args():
     parser.add_argument("--prompt_file", type=str, help="Path to the prompt file")
     parser.add_argument("--eval_file", type=str, help="Path to the eval file")
     parser.add_argument("--quick_test", type=int, default=None, help="Quickly test a few examples")
+    parser.add_argument("--save_dir", type=str, default= 'result', help="Path to save the results")
 
 
     # Dataset and task setting
     parser.add_argument("--dataset_name", type=str, help="The name of the dataset used, DuRecDial_ENGLISH, DuRecDial_CHINESE, TG-Redial_CHINESE, OpenKnowKG, ReDial")
     parser.add_argument("--task", type=str, help="The task to run, CRS, CHAT, REC, TOPIC, GOAl, KNOWLEDGE")
     parser.add_argument("--with_guidance", type=bool, default=False, help="Whether guidance in the task is used")
+    # parser.add_argument("--with_COT", type=bool, default=False, help="Whether COT is used")
     parser.add_argument("--guidance", type=str, default=None, help="The guidance to use, choose from TOPIC, GOAL, REC, KNOWLEDGE")
     # ICL setting
     # parser.add_argument("--ndoc", type=int, help="Number of documents")

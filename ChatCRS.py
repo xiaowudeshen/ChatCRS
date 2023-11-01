@@ -19,15 +19,17 @@ def make_demo(item, prompt, test_prompt, instruction=None, guidance = None, test
     
 
     prompt = prompt.replace("{INST}", instruction).replace("{Q}", item['Input'])
+    test_prompt = test_prompt.replace("{INST}", instruction).replace("{Q}", item['Input'])
     if guidance is not None:
         prompt = prompt.replace("{G}", item["guide_message"])
+        test_prompt = test_prompt.replace("{G}", item["guide_message"])
 
     if not test:
         answer = "\n" + "\n".join(item["Output"]) if isinstance(item["Output"], list) else item["Output"]
-        prompt = prompt.replace("{A}", "").rstrip() + answer
+        prompt = prompt.replace("{A}", answer).rstrip()
     else:
-        prompt = prompt.replace("{A}", "").rstrip() # remove any space or \n
-
+        # prompt = prompt.replace("{System Resonse: {A}}", "").rstrip() # remove any space or \n
+        prompt = test_prompt.rstrip()  # directly use test prompt format
     return prompt
 
 
@@ -49,7 +51,7 @@ def prepare_prompt_data(args, prompt_data):
                 instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], guidance = None, test= False
             )
         head_prompt += prompt_data["demo_sep"]
-    print(head_prompt)
+    # print(head_prompt)
     return head_prompt
 
 
@@ -93,7 +95,7 @@ def main():
         if args.with_guidance:
             eval_data[idx]['prompt'] = CRS_prompt + make_demo(
                 eval_item, prompt=prompt_data["demo_prompt"], test_prompt=prompt_data["test_prompt"], 
-                instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], guidance = prompt_data["guide_message"], test= False
+                instruction=prompt_data["Instructions"] + prompt_data["Task"] + prompt_data["Rule"], guidance = prompt_data["guide_message"], test= True
             )
         else:
             eval_data[idx]['prompt'] = CRS_prompt + make_demo(
@@ -106,7 +108,7 @@ def main():
     #run evaluation
     for idx, item in enumerate(tqdm(eval_data)):
         prompt = item['prompt']
-        print(prompt)
+        # print(prompt)
         prompt_len = len(CRS.tokenizer.tokenize(prompt))
 
         if idx == 0:
@@ -213,13 +215,22 @@ def main():
         name += f"-forceciteshow"
 
     
+    eval_data = {
+        "args": args.__dict__,
+        "data": eval_data,
+    }
+    # # save all to the results folder
+    # if not os.path.exists("result"):
+    #     os.makedirs("result")
+    # json.dump(eval_data, open("result/" + name + ".json", "w"), indent=4)
+    # logger.info("Saved results to %s/%s.json", name)
     
        #Calculate price for API usage
     if args.openai_api:
         logger.info(f"Token used: prompt {CRS.prompt_tokens}; completion {CRS.completion_tokens}")
-        if "CHATGPT" in args.model:
+        if  args.model == 'CHATGPT':
             p_price, c_price = 0.0015, 0.002
-        if "GPT4" in args.model:
+        if  args.model == "GPT4":
             p_price, c_price = 0.03, 0.06   
         else:
             logger.warn("Cannot find model price")
@@ -231,14 +242,16 @@ def main():
         logger.info(f"Total cost: %.1f" % (eval_data["total_cost"]))
     
     
-    eval_data = {
-        "args": args.__dict__,
-        "data": eval_data,
-    }
+    
     # save all to the results folder
-    if not os.path.exists("result"):
-        os.makedirs("result")
-    json.dump(eval_data, open("result/" + name + ".json", "w"), indent=4)
+    if not os.path.exists(args.save_dir):
+        os.makedirs(args.save_dir)
+    file_name = args.save_dir + "/" + name + ".json"
+    with open(file_name, "w") as f:
+        json.dump(eval_data, f, indent=4)
+    # json.dump(eval_data, open(file_name, "w"), indent=4)
+    # breakpoint()
+    logger.info("Saved results to %s/%s.json", args.save_dir, name)
 
 
  

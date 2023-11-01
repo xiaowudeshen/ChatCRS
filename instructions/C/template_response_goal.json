@@ -1,0 +1,46 @@
+{
+    "Instructions": "You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations.",
+    "Task": " Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal.",
+    "Rule": " Please output in json format and system response must satisfy the system dialogue goal provided.",
+    "guide_message": "GOAL",
+    "demo_sep": "\n\n\n",
+    "demo_prompt": "Instructions: {INST}\n\nInput: {\nDialogue History: {Q}}\n\nOutput: {System Dialogue Goal: {G}\nSystem Resonse: {A}}",
+    "demos": [
+        {
+            "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:",
+            "guide_message": "['Movie recommendation']",
+            "Output": "Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it."
+        },
+        {
+            "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:",
+            "guide_message": "['Movie recommendation']",
+            "Output": "It's a comedy. Very funny!"
+    
+        },
+        {
+            "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n[system]:",
+            "guide_message": "['Movie recommendation']",
+            "Output": "The movie Jackie Chan: My Stunts starred by him shows the hardships behind kung fu movies. After watching it, you will have a new understanding of him."
+        },
+        {
+            "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n[system]:The movie Jackie Chan: My Stunts starred by him shows the hardships behind kung fu movies. After watching it, you will have a new understanding of him.\n[user]:What kind of movie is it?\n[system]:",
+            "guide_message": "['Movie recommendation']",
+            "Output": "It's a documentary."
+    
+        },
+        {
+            "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n[system]:The movie Jackie Chan: My Stunts starred by him shows the hardships behind kung fu movies. After watching it, you will have a new understanding of him.\n[user]:What kind of movie is it?\n[system]:It's a documentary.\n[user]:Well, I like it. You know me so well.\n[system]:",
+            "guide_message": "['Movie recommendation']",
+            "Output": "I'm glad you like it."
+    
+        },
+        {
+            "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:",
+            "guide_message": "['Weather notification']",
+            "Output": "Yeah, it's getting colder. Please keep warm!"
+    
+        }
+    ],
+    "test_prompt": "Instructions: {INST}\n\nInput: {\nDialogue History: {Q}}\n\nOutput: ",
+    "Goals": []
+}

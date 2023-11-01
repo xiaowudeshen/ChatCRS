@@ -1,0 +1,11 @@
+---
+prompt_file: instructions/C/template_response_goal.json
+eval_file: data_test/DuRecDial_ENGLISH_CRS_GOAL.json
+dataset_name: DuRecDial_ENGLISH
+with_guidance: True
+guidance: GOAL
+task: CRS
+shot: 3
+tag: test
+temperature: 1.0
+top_p: 0.95

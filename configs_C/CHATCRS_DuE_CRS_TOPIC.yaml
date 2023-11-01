@@ -1,0 +1,11 @@
+---
+prompt_file: instructions/C/template_response_topic.json
+eval_file: data_test/DuRecDial_ENGLISH_CRS_TOPIC.json
+dataset_name: DuRecDial_ENGLISH
+with_guidance: True
+guidance: TOPIC
+task: CRS
+shot: 3
+tag: test
+temperature: 1.0
+top_p: 0.95

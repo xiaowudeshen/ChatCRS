@@ -1,5 +1,5 @@
 ---
-prompt_file: instructions/template_response_goal.json
+prompt_file: instructions/J/template_response_goal.json
 eval_file: data_test/DuRecDial_ENGLISH_CRS_GOAL.json
 dataset_name: DuRecDial_ENGLISH
 with_guidance: True

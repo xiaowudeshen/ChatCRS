@@ -1,5 +1,5 @@
 ---
-prompt_file: instructions/template_response.json
+prompt_file: instructions/J/template_response.json
 eval_file: data_test/DuRecDial_ENGLISH_CRS.json
 dataset_name: DuRecDial_ENGLISH
 task: CRS
