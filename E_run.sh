@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -N LLAMA_lora
+#PBS -N Evaluation
 #PBS -l select=1:ncpus=10:mem=10gb
 #PBS -l walltime=1:00:00
 #PBS -j oe

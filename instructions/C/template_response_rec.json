@@ -4,7 +4,7 @@
     "Rule": " Please limit your response to one or two sentences and satisfy the recommendation provided.",
     "guide_message": "REC",
     "demo_sep": "\n\n\n",
-    "demo_prompt": "Instructions: {INST}\n\nInput: {\nDialogue History: {Q}}\n\nOutput: {System Recommendations: {G}\nSystem Resonse: {A}}",
+    "demo_prompt": "Instructions: {INST}\n\nInput: {\nDialogue History: {Q}}\n\nOutput: {System Recommendations: {G}\nSystem Response: {A}}",
     "demos": [
         {
             "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:",

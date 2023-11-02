@@ -36,7 +36,7 @@ nvidia-smi
 # python ChatCRS.py --config configs/CHATCRS_DuE_CRS_TOPIC.yaml  --model LLAMA2 --huggingface_key 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 --save_dir result_L
 
 
-python ChatCRS.py --config configs_C/CHATCRS_DuE_CRS_GOAL.yaml  --model LLAMA2 --huggingface_key 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  --save_dir result_C
+python ChatCRS.py --config configs_C/CHATCRS_DuE_CRS_GOAL.yaml  --model LLAMA2 --huggingface_key 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  --save_dir result_C --quick_test 1000
 # python ChatCRS.py --config configs_C/CHATCRS_DuE_CRS_REC.yaml  --model LLAMA2 --huggingface_key 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 --save_dir result_C
 # python ChatCRS.py --config configs_C/CHATCRS_DuE_CRS_TOPIC.yaml  --model LLAMA2 --huggingface_key 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 --save_dir result_C
 # python ChatCRS.py --config configs/CHATCRS_DuE_CHAT.yaml  --model LLAMA2 --huggingface_key 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
