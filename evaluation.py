@@ -252,8 +252,15 @@ def tgredial_bleu(tokenized_gen, tokenized_tar):
     return bleu_sum / count, bleu1_sum / count, bleu2_sum / count
 
 
+def is_json(myjson):
+  try:
+    json.loads(myjson)
+  except ValueError as e:
+    return False
+  return True
 
-def automatic_evaluation(args, path_to_data):
+
+def automatic_evaluation(args, path_to_data, json_format=True):
     task_dic = {
         "DuRecDial_ENGLISH": ["CRS", "CHAT", "REC", "TOPIC", "GOAL", "KNOWLEDGE"],
         "DuRecDial_CHINESE": ["CRS", "CHAT", "REC", "TOPIC", "GOAL"],
@@ -273,6 +280,9 @@ def automatic_evaluation(args, path_to_data):
         data = json.load(infile)
     A_golds = []
     A_preds = []
+
+    format_error = 0
+    # json_format = True   # argument for json format
     for d in data["data"]:
         if type(d["Output"]) is list:
             A_golds.append([normalize_answer(item) for item in d["Output"]])
@@ -281,8 +291,38 @@ def automatic_evaluation(args, path_to_data):
         if type(d["output"]) is list:
             A_preds.append([normalize_answer(item) for item in d["output"]])
         else:
-            A_preds.append(normalize_answer(d["output"]))
+            
+            if json_format:
+                if is_json(d["output"]) and "System Resonse" in json.loads(d["output"]):
+                    dj = json.loads(d["output"])
+                    # if "system Resonse" not in dj:
+                    #     print(dj)
+                    #     breakpoint()
+                    A_preds.append(dj["System Resonse"])  # process for json format
+                else: 
+                    format_error += 1
+                    A_golds.pop()
+            else:
+                A_preds.append(normalize_answer(d["output"]))  # process for natural langauage
+                    
+
+            # dj = d["output"].replace("{System Resonse:", "").replace("}", "").replace("\n", "").strip()
+            # A_preds.append(normalize_answer(dj))  # process for json format
+        # print('$$$$$$$$$$$$$$$')
+        # print(d["Output"])
+        # print(dj)
+        # breakpoint()
+    print('format error: ', format_error)
+    print(len(A_golds), len(A_preds))
+
     # A_preds = A_golds.copy()
+
+    # json_format = True
+    # if json_format:
+    #     for d in A_preds:
+    #         if is_json(d):
+    #             dj = json.loads(d)[""]
+    
     if args.dataset_name == 'DuRecDial_ENGLISH':
         if args.task in ['CRS', 'CHAT']:
             #running result for F1, blue, distinct
@@ -376,7 +416,7 @@ def automatic_evaluation(args, path_to_data):
 
 
 if __name__ == '__main__':
-    file_dir = 'result'
+    file_dir = 'result_C'
     # file_path = 'DuRecDial_ENGLISH-CHATGPT-CHAT-None-shot1-42-quick_test5.json'
     # file_path = 'DuRecDial_ENGLISH-CHATGPT-TOPIC-None-shot1-42-quick_test5.json'
     # file_path = 'DuRecDial_ENGLISH-CHATGPT-GOAL-None-shot1-42-quick_test5.json'
@@ -384,11 +424,14 @@ if __name__ == '__main__':
     # file_path = 'DuRecDial_ENGLISH-CHATGPT-REC-None-shot1-42-quick_test5.json'
     # file_path = 'DuRecDial_ENGLISH-LLAMA2-CRS-guiNone-shot3-42.json'
     # file_path = 'DuRecDial_ENGLISH-LLAMA2-CRS-guiREC-shot3-42.json'
-    file_path = 'DuRecDial_ENGLISH-LLAMA2-CRS-guiGOAL-shot3-42-quick_test100.json'
+    file_path = 'DuRecDial_ENGLISH-LLAMA2-CRS-guiGOAL-shot3-42-quick_test1000.json'
     # file_path = 'DuRecDial_ENGLISH-CHATGPT-CRS-guiNone-shot3-42-quick_test1000.json'
     # file_path = 'DuRecDial_ENGLISH-LLAMA2-CHAT-None-shot1-42.json'
     # print("Instructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:\nSystem Dialogue Goal: ['Movie recommendation']}\n\nOutput: {System Resonse: }Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:\nSystem Dialogue Goal: ['Movie recommendation']}\n\nOutput: {System Resonse: }It's a comedy. Very funny!\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:\nSystem Dialogue Goal: ['Weather notification']}\n\nOutput: {System Resonse: }Yeah, it's getting colder. Please keep warm!\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:What is Xun Zhou's star sign?\n[system]:It's Libra.\n[user]:Good for you! You know so much.\n[system]:I also know that she has won the Asian Film Awards for Best Actress.\n[user]:She's my idol. Her acting skills are excellent.\n[system]:\nSystem Dialogue Goal: ['Chat about stars']}\n\nOutput: {System Resonse: }She was born for acting and has won the Chinese Film Media Awards for Best Actress.")
-    print("Instructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:\nSystem Dialogue Goal: ['Movie recommendation']}\n\nOutput: {System Resonse: Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.}\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:\nSystem Dialogue Goal: ['Movie recommendation']}\n\nOutput: {System Resonse: It's a comedy. Very funny!}\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:\nSystem Dialogue Goal: ['Weather notification']}\n\nOutput: {System Resonse: Yeah, it's getting colder. Please keep warm!}\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:What's the height of Jay Chou, do you know?\n[system]:175cm.\n[user]:Good for you.\n[system]:Jay Chou is an entertainment and sports star\n[user]:Yes, he is the God of the whole nation.\n[system]:Yes, he is one of top singers in Taiwan.\n[user]:He has also won eight annual record sales Champions in Greater China area.\n[system]:I'd like to recommend one of his songs, Snake Dance. The whole song combines Egyptian and Middle Eastern folk music styles with hip-hop, as well as seductive singing, creating a unique and charming hip-hop duet song.\n[user]:It sounds very good.\n[system]:Yes, it's a good song.\n[user]:Then I want to hear it.\n[system]:Do you need me to play it for you?\n[user]:Yes.\n[system]:\nSystem Dialogue Goal: ['Play music']}\n\nOutput: {System Resonse: There you go.}")
+    # print("Instructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:\nSystem Dialogue Goal: ['Movie recommendation']}\n\nOutput: {System Resonse: Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.}\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:\nSystem Dialogue Goal: ['Movie recommendation']}\n\nOutput: {System Resonse: It's a comedy. Very funny!}\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:\nSystem Dialogue Goal: ['Weather notification']}\n\nOutput: {System Resonse: Yeah, it's getting colder. Please keep warm!}\n\n\nInstructions: You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations. Your task is to generate the next system reponse given the dialogue history and satisfy the conversation goal. Please output in json format and system response must satisfy the system dialogue goal provided.\n\nInput: {\nDialogue History: [user]:What's the height of Jay Chou, do you know?\n[system]:175cm.\n[user]:Good for you.\n[system]:Jay Chou is an entertainment and sports star\n[user]:Yes, he is the God of the whole nation.\n[system]:Yes, he is one of top singers in Taiwan.\n[user]:He has also won eight annual record sales Champions in Greater China area.\n[system]:I'd like to recommend one of his songs, Snake Dance. The whole song combines Egyptian and Middle Eastern folk music styles with hip-hop, as well as seductive singing, creating a unique and charming hip-hop duet song.\n[user]:It sounds very good.\n[system]:Yes, it's a good song.\n[user]:Then I want to hear it.\n[system]:Do you need me to play it for you?\n[user]:Yes.\n[system]:\nSystem Dialogue Goal: ['Play music']}\n\nOutput: {System Resonse: There you go.}")
+    # print("Instructions: {INST}\n\nInput: {\n\"Dialogue History\": \"{Q}\"}\n\nOutput: {\"System Dialogue Goal\": \"{G}\",\"System Resonse\": \"{A}\"}")
+    # A = "{\"System Dialogue Goal\": \"['Movie recommendation']\",\"System Resonse\": \"Children From The Distant Planet is very interesting. I heard it's about a story between a robot and a monster. You can go to see it.\"}\n"
+ 
     file_name = os.path.join(file_dir, file_path)
     print(file_name)
     args = get_args()
