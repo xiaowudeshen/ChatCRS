@@ -29,6 +29,19 @@ Our ChatCRS is out and it can be accessed with the [LINK]()
 
 **Empirical Analysis**
 ```console
-❱❱❱ python ChatCRS.py --config_file [Your configuration file]
+## Running direct Genenration using OPENAI ChatGPT/GPT4
+❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_GOAL.yaml  --model CHATGPT --openai_api_key [YOUR OPENAI API KEY] --save_dir result_DG
+❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_KNOWLEDGE.yaml  --model CHATGPT --openai_api_key  [YOUR OPENAI API KEY] --save_dir result_DG/KG1
+❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_REC_KNOWLEDGE.yaml  --model CHATGPT --openai_api_key  [YOUR OPENAI API KEY] --save_dir result_DG/KG1
+
+## Running direct Genenration using LLaMA or other Huggingface LLMs
+❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_GOAL.yaml  --model LLAMA2 --huggingface_key [YOUR HuggingFace KEY] --save_dir result_DG
+❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_KNOWLEDGE.yaml  --model LLAMA2 --huggingface_key [YOUR HuggingFace KEY] --save_dir result_DG/KG1
+❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_REC_KNOWLEDGE.yaml  --model LLAMA2 --huggingface_key [YOUR HuggingFace KEY] --save_dir result_DG/KG1
+
 ```
-* --config_file: Your config file that stores the necessary configuration for running the experiments
+
+* --config: Your config file that stores the necessary configuration for running the experiments
+* --model: Your LLM for running the empirical analysis
+* --openai_api_key: Your own OPENAI API KEY
+* --huggingface_key Your own HuggingFace KEY
