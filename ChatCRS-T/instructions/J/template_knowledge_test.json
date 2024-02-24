@@ -1,0 +1,33 @@
+
+{
+    "Instructions": "",
+    "Task": " Your task is to answer that question that caontain certain factual knowledge",
+    "Rule": " Please directly answer the question without repeating the question.",
+    "demo_sep": "\n\n\n",
+    "demo_prompt": "{INST}\n\nInput: {Q}\n\nOutput: {A}",
+    "demos": [
+        {
+            "Input":"Description: The birthday of a person. Question: What is the birthday of \"Jay Chou\"?",
+            "Output": "1979 - 1 - 18"
+        },
+        {
+            "Input": "Description: The star sing of a person. Question: What is the star sign of the person \"Jacky Cheung\"?",
+            "Output": "Cancer"
+        },
+        {
+            "Input": "Description: The meal that is good to have for a weather. Question: What meal is good to have for the weather of \"Light rain will give way to overcast skies. North winds.The high will be 15 ℃, and low 13 ℃\"?",
+            "Output": "Sliced Fish in Hot Chili Oil"
+        },
+        {
+            "Input": "Description: The song that a singer sings. Question: What is the song that the person \"Leehom Wang\" sings?",
+            "Output": "Hand in Hand"
+        },
+        {
+            "Input": "Description: The movie that a star starts in. Question: What movie did \"Cecilia Cheung\" in?",
+            "Output": "Left Right Love Destiny"
+        }
+    ],
+    "test_prompt": "{INST}\n\nInput: {Q}\n\nOutput: {A}",
+    "Inputs": [],
+    "Responses": []
+}

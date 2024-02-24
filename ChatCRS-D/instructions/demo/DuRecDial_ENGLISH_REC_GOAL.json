@@ -1,0 +1,52 @@
+[
+    {
+        "dial/turn_id": "3298-7",
+        "task": "REC",
+        "guidance": "GOAL",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n",
+        "guide_message": "[goal]:['Movie recommendation']",
+        "Output": [
+            "To Miss with Love"
+        ]
+    },
+    {
+        "dial/turn_id": "3300-7",
+        "task": "REC",
+        "guidance": "GOAL",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n",
+        "guide_message": "[goal]:['Movie recommendation']",
+        "Output": [
+            "Jackie Chan: My Stunts"
+        ]
+    },
+    {
+        "dial/turn_id": "3302-3",
+        "task": "REC",
+        "guidance": "GOAL",
+        "Input": "[user]:Hello, please play Sports Car Model for me.\n[system]:Okay. It's playing now.\n[user]:thank you.\n",
+        "guide_message": "[goal]:['Music recommendation']",
+        "Output": [
+            "Self Directed Act"
+        ]
+    },
+    {
+        "dial/turn_id": "3302-5",
+        "task": "REC",
+        "guidance": "GOAL",
+        "Input": "[user]:Hello, please play Sports Car Model for me.\n[system]:Okay. It's playing now.\n[user]:thank you.\n[system]:It's done. By the way, you can also listen to Jay Chou's Self Directed Act. It's a R&B song.\n[user]:I've heard that. I don't want to hear this for the moment.\n",
+        "guide_message": "[goal]:['Music recommendation']",
+        "Output": [
+            "Floral Sea"
+        ]
+    },
+    {
+        "dial/turn_id": "3303-7",
+        "task": "REC",
+        "guidance": "GOAL",
+        "Input": "[user]:What's Jackie Chan's zodiac sign?\n[system]:He is a Aries.\n[user]:I see. You're great.\n[system]:I also know that he is a Chinese star who comes out into foreign film and television industry. He is also known as one of the world's top ten outstanding young people.\n[user]:Yes. He's not only a kung fu star, but also has become a cultural symbol.\n[system]:Right. He is the greatest action actor in China. He has dedicated a lot to acting.\n[user]:His movies are amazing.\n",
+        "guide_message": "[goal]:['Movie recommendation']",
+        "Output": [
+            "The Foreigner"
+        ]
+    }
+]

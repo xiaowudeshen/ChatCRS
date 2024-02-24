@@ -1,0 +1,38 @@
+{
+    "Instructions": "You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations.",
+    "Task": "Given the dialogue history, the conversation goal and knowledge triples for next response, your task is to first repeat the conversation goal and knowledge and then genenrate appropriate system response.",
+    "Rule": "Please reply by completing the output template \"The predicted dialogue goal is [], the predicted knowledge is [] and the system response is []\".",
+    "demo_sep": "\n\n\n",
+    "guide_message": "BOTH",
+    "demo_prompt": "Instructions: {INST}\n\nDialogue History: {Q}\n\n{G}\n\nOutput: {A}",
+    "demos": [
+        {
+            "Input": "[system]:最近怎么样？\n[用户]:最近还行吧，一直在哄孩子。\n[system]:嗯嗯，你家孩子经常哭闹吗？\n[用户]:还好吧，闹人的时候就用气球哄她，就好了。\n[system]:",
+            "guide_message": "Conversation Goal: ['谈论并请求推荐']\n\nKnowledge Triples: ['气球','玩','童年']",
+            "Output": "The system response is [\"对，我小时候也很喜欢玩气球。那我给你推荐一部童年题材的电影吧。\"]"
+            
+        },
+        {
+            "Input": "[system]:最近怎么样？\n[用户]:最近还行吧，一直在哄孩子。\n[system]:嗯嗯，你家孩子经常哭闹吗？\n[用户]:还好吧，闹人的时候就用气球哄她，就好了。\n[system]:对，我小时候也很喜欢玩气球。那我给你推荐一部童年题材的电影吧。\n[用户]:嗯嗯，可以，我刚好想带她看看“童年”电影。\n[system]:",
+            "guide_message": "Conversation Goal: ['推荐电影']\n\nKnowledge Triples: ['迪迦&戴拿&盖亚·奥特曼 超时空的大决戦','童年','满足']",
+            "Output": "The system response is [\"我觉得你可以看看《迪迦&戴拿&盖亚·奥特曼 超时空的大决戦》，该影片满足了我童年的所有愿望。\"]"
+        },
+        {
+            "Input": "[system]:最近怎么样？\n[用户]:最近还行吧，一直在哄孩子。\n[system]:嗯嗯，你家孩子经常哭闹吗？\n[用户]:还好吧，闹人的时候就用气球哄她，就好了。\n[system]:对，我小时候也很喜欢玩气球。那我给你推荐一部童年题材的电影吧。\n[用户]:嗯嗯，可以，我刚好想带她看看“童年”电影。\n[system]:我觉得你可以看看《迪迦&戴拿&盖亚·奥特曼 超时空的大决戦》，该影片满足了我童年的所有愿望 。\n[用户]:偶然翻到了这个，以前看的时候感动到不行。\n[system]:",
+            "guide_message": "Conversation Goal: ['谈论']\n\nKnowledge Triples: ['神通','童年','回忆']",
+            "Output": "The system response is [\"嗯嗯。我也很喜欢看这个电影，但是我还是最喜欢看爱情电影啦，哈哈。\"]"
+       
+        },
+        {
+            "Input": "[system]:最近怎么样？\n[用户]:最近还行吧，一直在哄孩子。\n[system]:嗯嗯，你家孩子经常哭闹吗？\n[用户]:还好吧，闹人的时候就用气球哄她，就好了。\n[system]:对，我小时候也很喜欢玩气球。那我给你推荐一部童年题材的电影吧。\n[用户]:嗯嗯，可以，我刚好想带她看看“童年”电影。\n[system]:我觉得你可以看看《迪迦&戴拿&盖亚·奥特曼 超时空的大决戦》，该影片满足了我童年的所有愿望 。\n[用户]:偶然翻到了这个，以前看的时候感动到不行。\n[system]:嗯嗯。我也很喜欢看这个电影，但是我还是最喜欢看爱情电影啦，哈哈。\n[用户]:没错，如果让我回忆印象最深刻的电影，我的回忆大都关于爱情。\n[system]:",
+            "guide_message": "Conversation Goal: ['请求推荐并推荐电影']\n\nKnowledge Triples: ['神通','童年','回忆']",
+            "Output": "The system response is [\"那你可以看看《神通》，这是一部关于童年与回忆的电影，小时候看过很多遍。\"]"
+            
+    
+        }
+        
+        
+    ],
+    "test_prompt":"Instructions: {INST}\n\nDialogue History: {Q}\n\n{G}\n\nOutput: ",
+    "Goals": []
+}

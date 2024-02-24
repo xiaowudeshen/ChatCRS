@@ -1,0 +1,9 @@
+---
+prompt_file: instructions/DG/template_response_goal_DG.json
+eval_file: data_test/DuRecDial_ENGLISH_CRS.json
+dataset_name: DuRecDial_ENGLISH
+task: CRS
+shot: 3
+tag: test
+temperature: 1.0
+top_p: 0.95

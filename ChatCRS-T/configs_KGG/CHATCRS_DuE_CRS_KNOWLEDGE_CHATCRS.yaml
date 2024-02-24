@@ -1,0 +1,11 @@
+---
+prompt_file: instructions/KGG/template_response_knowledge_KGG.json
+eval_file: data_ChatCRS/DuRecDial_ENGLISH_CRS_KNOWLEDGE.json
+dataset_name: DuRecDial_ENGLISH
+with_guidance: True
+guidance: KNOWLEDGE
+task: CRS
+shot: 3
+tag: test
+temperature: 1.0
+top_p: 0.95

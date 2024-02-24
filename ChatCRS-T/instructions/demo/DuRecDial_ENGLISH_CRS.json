@@ -1,0 +1,140 @@
+[
+    {
+        "dial-turn_id": "3297-1",
+        "task": "CRS",
+        "Input": "[user]:What time is it now?\n[system]:",
+        "Output": "It's 22 o'clock."
+    },
+    {
+        "dial-turn_id": "3297-3",
+        "task": "CRS",
+        "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:",
+        "Output": "It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103."
+    },
+    {
+        "dial-turn_id": "3297-5",
+        "task": "CRS",
+        "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:",
+        "Output": "Yeah, it's getting colder. Please keep warm!"
+    },
+    {
+        "dial-turn_id": "3297-7",
+        "task": "CRS",
+        "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:Yeah, it's getting colder. Please keep warm!\n[user]:OK, thanks! You are so sweet.\n[system]:",
+        "Output": "You're welcome. I'd like to be your sweetheart forever."
+    },
+    {
+        "dial-turn_id": "3297-9",
+        "task": "CRS",
+        "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:Yeah, it's getting colder. Please keep warm!\n[user]:OK, thanks! You are so sweet.\n[system]:You're welcome. I'd like to be your sweetheart forever.\n[user]:Gotta go to bed. Bye!\n[system]:",
+        "Output": "All right. Bye!"
+    },
+    {
+        "dial-turn_id": "3298-1",
+        "task": "CRS",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:",
+        "Output": "Yes, of course I know that. It's Jimmy Lin."
+    },
+    {
+        "dial-turn_id": "3298-3",
+        "task": "CRS",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:",
+        "Output": "He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014."
+    },
+    {
+        "dial-turn_id": "3298-5",
+        "task": "CRS",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:",
+        "Output": "He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003."
+    },
+    {
+        "dial-turn_id": "3298-7",
+        "task": "CRS",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:",
+        "Output": "Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it."
+    },
+    {
+        "dial-turn_id": "3298-9",
+        "task": "CRS",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:",
+        "Output": "It's a comedy. Very funny!"
+    },
+    {
+        "dial-turn_id": "3298-11",
+        "task": "CRS",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:It's a comedy. Very funny!\n[user]:I like comedies. I'll watch it sometime.\n[system]:",
+        "Output": "It won't let you down."
+    },
+    {
+        "dial-turn_id": "3298-13",
+        "task": "CRS",
+        "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:It's a comedy. Very funny!\n[user]:I like comedies. I'll watch it sometime.\n[system]:It won't let you down.\n[user]:Well, I'm going to do the laundry. Talk later.\n[system]:",
+        "Output": "OK, I'll leave you alone."
+    },
+    {
+        "dial-turn_id": "3299-1",
+        "task": "CRS",
+        "Input": "[user]:What time is it?\n[system]:",
+        "Output": "It's 12:00 at noon."
+    },
+    {
+        "dial-turn_id": "3299-3",
+        "task": "CRS",
+        "Input": "[user]:What time is it?\n[system]:It's 12:00 at noon.\n[user]:Good for you! Your answer is so accurate every time.\n[system]:",
+        "Output": "Sure. By the way, it's sunny, with southwest wind today. The highest temperature is 13\u2103, and the lowest temperature is 0\u2103. It's dry and cold."
+    },
+    {
+        "dial-turn_id": "3299-5",
+        "task": "CRS",
+        "Input": "[user]:What time is it?\n[system]:It's 12:00 at noon.\n[user]:Good for you! Your answer is so accurate every time.\n[system]:Sure. By the way, it's sunny, with southwest wind today. The highest temperature is 13\u2103, and the lowest temperature is 0\u2103. It's dry and cold.\n[user]:Yeah. No wonder the weather is so bad. You are so sweet!\n[system]:",
+        "Output": "Hey hey, my pleasure."
+    },
+    {
+        "dial-turn_id": "3299-7",
+        "task": "CRS",
+        "Input": "[user]:What time is it?\n[system]:It's 12:00 at noon.\n[user]:Good for you! Your answer is so accurate every time.\n[system]:Sure. By the way, it's sunny, with southwest wind today. The highest temperature is 13\u2103, and the lowest temperature is 0\u2103. It's dry and cold.\n[user]:Yeah. No wonder the weather is so bad. You are so sweet!\n[system]:Hey hey, my pleasure.\n[user]:Well, I'm going to have a meal. Bye!\n[system]:",
+        "Output": "OK, see ya!"
+    },
+    {
+        "dial-turn_id": "3300-1",
+        "task": "CRS",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:",
+        "Output": "Yes, it's Jackie Chan."
+    },
+    {
+        "dial-turn_id": "3300-3",
+        "task": "CRS",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:",
+        "Output": "Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist."
+    },
+    {
+        "dial-turn_id": "3300-5",
+        "task": "CRS",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:",
+        "Output": "Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor."
+    },
+    {
+        "dial-turn_id": "3300-7",
+        "task": "CRS",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n[system]:",
+        "Output": "The movie Jackie Chan: My Stunts starred by him shows the hardships behind kung fu movies. After watching it, you will have a new understanding of him."
+    },
+    {
+        "dial-turn_id": "3300-9",
+        "task": "CRS",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n[system]:The movie Jackie Chan: My Stunts starred by him shows the hardships behind kung fu movies. After watching it, you will have a new understanding of him.\n[user]:What kind of movie is it?\n[system]:",
+        "Output": "It's a documentary."
+    },
+    {
+        "dial-turn_id": "3300-11",
+        "task": "CRS",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n[system]:The movie Jackie Chan: My Stunts starred by him shows the hardships behind kung fu movies. After watching it, you will have a new understanding of him.\n[user]:What kind of movie is it?\n[system]:It's a documentary.\n[user]:Well, I like it. You know me so well.\n[system]:",
+        "Output": "I'm glad you like it."
+    },
+    {
+        "dial-turn_id": "3300-13",
+        "task": "CRS",
+        "Input": "[user]:Hello! Could you tell me who starred in the movie Bruce Lee: A Warrior's Journey?\n[system]:Yes, it's Jackie Chan.\n[user]:Wow, you know so much. Good for you!\n[system]:Hehe, I'm known as an encyclopedia! I also know he is a model worker and a great philanthropist.\n[user]:Yeah, he's really outstanding. And he has won many awards. Do you know what awards they are?\n[system]:Yes. He has won the Teen Choice Award for Choice Chemistry, and the Golden Rooster Award for Best Actor.\n[user]:Wow, that's my favorite idol, who has great acting skills.\n[system]:The movie Jackie Chan: My Stunts starred by him shows the hardships behind kung fu movies. After watching it, you will have a new understanding of him.\n[user]:What kind of movie is it?\n[system]:It's a documentary.\n[user]:Well, I like it. You know me so well.\n[system]:I'm glad you like it.\n[user]:Well, I'm home now. See you next time. Bye.\n[system]:",
+        "Output": "Bye!"
+    }
+]

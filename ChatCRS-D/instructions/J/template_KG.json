@@ -1,0 +1,29 @@
+
+{
+    "Instructions": "You are an excellent knowledge retriever that helps select the relation of a knowledge triple from the given candidate relations.",
+    "Task": " Your task is to choose the only one relation from the candidate relations that is related to the conversation, given the entity and the dialogue history.",
+    "Rule": " Please directly answer the question in the following format: \"The relation is XXX.\"",
+    "demo_sep": "\n\n\n",
+    "guide_message": "KNOWLEDGE",
+    "demo_prompt": "{INST}\n\nDialogue History: {Q}\n{G}\n\nOutput: {A}",
+    "demos": [
+        {
+            "Input": "[user]:Hello, Mr.Chen! How are you doing?\n[system]:Hello! Not bad. It's just that there's a lot of pressure from study.\n[user]:You should find a way to relax yourself properly, such as jogging, listening to music and so on.\n[system]:OK, I will. Thanks for telling me that!\n[user]:Actually, it's a good choice to watch movies. The Hong Kong movie Cold War is worth watching. The layout and atmosphere of the whole movie are great. It suprised me a lot\n[system]:Well, I don't want to watch movies now.\n[user]:It's starred by Aaron Kwok, who has won the Hong Kong Film Awards for Best Actor.\n",
+            "guide_message": "Entity: Aaron Kwok \n\nCandidate Relations: ['Intro', 'Achievement', 'Stars', 'Awards', 'Height', 'Star sign', 'Comments', 'Birthplace', 'Sings', 'Birthday']",
+            "Output": "\"The relation is Intro.\""
+        },
+        {
+            "Input": "[user]:Good evening, Lixiang Ma. How are you? Are you okay?\n[system]:Good evening. I feel terrible. I didn't do well in the exam.\n[user]:Don't be upset. You will do well next time. I believe you!\n[system]:OK, you made me confident. Thank you!\n[user]:You're welcome. Don't be sad. Here's a movie for you called New Shaolin Temple. It's not just a simple adaptation. It's produced by the Shaolin Temple's host, and aims to advocate the culture of Shaolin Temple.\n[system]:Sorry, I don't want to talk about movies now.\n[user]:Then let's talk about its leading role, Bingbing Fan, whose movies are blockbusting.\n",
+            "guide_message": "Entity: Bingbing Fan \n\nCandidate Relations: ['Stars', 'Intro', 'Star sign', 'Achievement', 'Sings', 'Birthday', 'Comments', 'Awards', 'Height', 'Weight', 'Birthplace', 'Blood Type']",
+            "Output": "\"The relation is Intro.\""
+        },
+        {
+            "Input": "[user]:Good evening, Shanxiang Chen. How are you today?\n[system]:Good evening. I had a good time today. I've got bonus.\n[user]:I'm so happy for you. How would you spend it?\n[system]:I wanna save money to buy a big one, hahaha!\n[user]:Why don't you go to see a movie? The latest movie The Mirror is composed of five thriller stories, which is kind of special.\n[system]:Thanks! But I don't want to talk about movies now.\n[user]:All right. Then let's talk about its leading star Ruby Lin.\n[system]:Ruby Lin? I like her very much. She's my idol.\n[user]:Yeah. She has won the 5th Seoul International Drama Awards for Most Popular Actress. After all these years, she is still the most beautiful person.\n",
+            "guide_message": "Entity: Ruby Lin \n\nCandidate Relations: ['Stars', 'Intro', 'Comments', 'Achievement', 'Birthday', 'Star sign', 'Sings', 'Height', 'Birthplace', 'Blood Type']",
+            "Output": "\"The relation is Comments.\""
+        }
+    ],
+    "test_prompt": "{INST}\n\nDialogue History: {Q}\n{G}\n\nOutput: ",
+    "Inputs": [],
+    "Responses": []
+}

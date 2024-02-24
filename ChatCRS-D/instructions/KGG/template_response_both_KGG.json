@@ -1,0 +1,29 @@
+{
+    "Instructions": "You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations.",
+    "Task": "Given the dialogue history, the conversation goal and knowledge triples for next response, your task is to first repeat the conversation goal and knowledge and then genenrate appropriate system response.",
+    "Rule": "Please reply by completing the output template \"The predicted dialogue goal is [], the predicted knowledge is [] and the system response is []\".",
+    "demo_sep": "\n\n\n",
+    "guide_message": "BOTH",
+    "demo_prompt": "Instructions: {INST}\n\nDialogue History: {Q}\n\n{G}\n\nOutput: {A}",
+    "demos": [
+        {
+            "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:",
+            "guide_message": "Conversation Goal: ['Movie recommendation']\n\nKnowledge Triples: ['To Miss with Love','Comments' 'When I was a child, I thought many words in it were classic. After more than 20 years later, I want to see it again.']",
+            "Output": "The predicted dialogue goal is ['Movie recommendation'], the predicted knowledge is ['To Miss with Love','Comments' 'When I was a child, I thought many words in it were classic. After more than 20 years later, I want to see it again.'] and the system response is [\"Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\"]"
+        },
+        {
+            "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[system]:Since you like him so much, I wanna recommend to you the movie To Miss with Love, which is starred by him. There are many classic lines in it. You can go to see it.\n[user]:What kind of movie is it?\n[system]:",
+            "guide_message": "Conversation Goal: ['Movie recommendation']\n\nKnowledge Triples: ['To Miss with Love','Type','Comedy']",
+            "Output": "The predicted dialogue goal is ['Movie recommendation'], the predicted knowledge is ['To Miss with Love','Type','Comedy'] and the system response is [\"It's a comedy. Very funny!\"]."
+    
+        },
+        {
+            "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[system]:",
+            "guide_message": "Conversation Goal: ['Weather notification']\n\nKnowledge Triples: ['Shijiazhuang','2018-11-19','Sunny with south winds. The high will be 12 ℃, and low 1 ℃']",
+            "Output": "The predicted dialogue goal is ['Weather notification'], the predicted knowledge is ['Shijiazhuang','2018-11-19','Sunny with south winds. The high will be 12 ℃, and low 1 ℃'] and the system response is [\"Yeah, it's getting colder. Please keep warm!\"]."
+    
+        }
+    ],
+    "test_prompt":"Instructions: {INST}\n\nDialogue History: {Q}\n\n{G}\n\nOutput: ",
+    "Goals": []
+}

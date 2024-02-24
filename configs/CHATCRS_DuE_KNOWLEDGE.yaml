@@ -1,9 +1,0 @@
----
-prompt_file: instructions/template_knowledge.json
-eval_file: data_test/DuRecDial_ENGLISH_KNOWLEDGE.json
-dataset_name: DuRecDial_ENGLISH
-task: KNOWLEDGE
-shot: 1
-tag: test
-temperature: 1.0
-top_p: 0.95

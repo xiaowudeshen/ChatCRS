@@ -1,0 +1,49 @@
+{
+    "Instructions": "You are an excellent conversational recommender that helps the user achieve recommendation-related goals through conversations.",
+    "Task": " Given the dialogue history, your task is to predict the current goal of the conversation and plan the next goal of the conversation.",
+    "Rule": "  Please reply by completing the output template \"The current goal is [] and the next goal is # #\". Select the goal from the list of goals provided. Goal List: [ \"Ask about weather\", \"Food recommendation\", \"POI recommendation\", \"Say goodbye\", \"Q&A\", \"Chat about stars\", \"Music recommendation\", \"Play music\", \"Greetings\", \"Ask about user's name\", \"Ask about user's gender\", \"Ask about user's age\", \"Ask about user's hobbies\", \"Movie recommendation\", \"Ask about time\", \"Weather notification\", \"Music on demand\", \"Ask about date\", \"Ask questions\"]. If you don't know the answer, simply output None",
+    "demo_sep": "\n\n\n",
+    "demo_prompt": "{INST}\n\nInput: {Q}\n\nGoal: {A}",
+    "demos": [
+        {
+            "Input": "[user]:What time is it now?\n[system]:It's 22 o'clock.\n[user]:Thank you.\n[system]:It's sunny with south wind today. The highest temperature is 12\u2103, and the lowest temperature is 1\u2103.\n[user]:No wonder I feel a little cold at home.\n[goal]:",
+            "Output": "The current goal is [\"Weather notification\"] and the next goal is [\"Weather notification\"]"
+        },
+        {
+            "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[goal]:",
+            "Output": "The current goal is [\"Q&A\"] and the next goal is [\"Q&A\"]"
+        },
+        {
+            "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[goal]:",
+            "Output": "The current goal is [\"Q&A\"] and the next goal is [\"Chat about stars\"]" 
+        },
+        {
+            "Input": "[user]:Hello! Do you know who starred in the movie Flying Dagger?\n[system]:Yes, of course I know that. It's Jimmy Lin.\n[user]:OK, thank you.\n[system]:He is an amazing all-rounder, and he has won Chinese Youth Leader in 2014.\n[user]:He is my favorite star.\n[system]:He has also won the TV Dramas Awards Made in China for Most Appealing Actor in 2011, and was awarded as American International Outstanding Youth in 2003.\n[user]:Impressive! I will always be proud of him.\n[goal]:",
+            "Output": "The current goal is [\"Chat about stars\"] and the next goal is [\"Movie recommendation\"]" 
+        }
+    ],
+    "test_prompt": "{INST}\n\nInput: {Q}\n\nGoal: ",
+    "Inputs": [],
+    "Responses": [],
+    "Goal_dic": {
+        "0": "Ask about weather",
+        "1": "Food recommendation",
+        "2": "POI recommendation",
+        "3": "Say goodbye",
+        "4": "Q&A",
+        "5": "Chat about stars",
+        "6": "Music recommendation",
+        "7": "Play music",
+        "8": "Greetings",
+        "9": "Ask about user's name",
+        "10": "Ask about user's gender",
+        "11": "Ask about user's age",
+        "12": "Ask about user's hobbies",
+        "13": "Movie recommendation",
+        "14": "Ask about time",
+        "15": "Weather notification",
+        "16": "Music on demand",
+        "17": "Ask about date",
+        "18": "Ask questions"
+    }
+}
