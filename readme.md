@@ -19,13 +19,13 @@ Our ChatCRS is out and it can be accessed with the [LINK]()
 ## Experiments
 **Dataset**
 ```console
-❱❱❱ python dataTloader.py
+❱❱❱ python data_loader.py
 ```
 * --Create data for DuRecDial, data will be saved in the "data_p" folder
 ```console
 ❱❱❱ python data_loader_T.py
 ```
-* --Create data for TG-Redial, data will be saved in the "data" folder
+* --Create data for TG-Redial, data will be saved in the "data_p" folder
 
 **Empirical Analysis**
 ```console
@@ -33,14 +33,14 @@ Our ChatCRS is out and it can be accessed with the [LINK]()
 ❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_GOAL.yaml  --model CHATGPT --openai_api_key [YOUR OPENAI API KEY] --save_dir result_DG
 ❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_KNOWLEDGE.yaml  --model CHATGPT --openai_api_key  [YOUR OPENAI API KEY] --save_dir result_DG/KG1
 ❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_REC_KNOWLEDGE.yaml  --model CHATGPT --openai_api_key  [YOUR OPENAI API KEY] --save_dir result_DG/KG1
-
+```
+```console
 ## Running direct Genenration using LLaMA or other Huggingface LLMs
 ❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_GOAL.yaml  --model LLAMA2 --huggingface_key [YOUR HuggingFace KEY] --save_dir result_DG
 ❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_CRS_KNOWLEDGE.yaml  --model LLAMA2 --huggingface_key [YOUR HuggingFace KEY] --save_dir result_DG/KG1
 ❱❱❱ python ChatCRS.py --config configs_DG/CHATCRS_DuE_REC_KNOWLEDGE.yaml  --model LLAMA2 --huggingface_key [YOUR HuggingFace KEY] --save_dir result_DG/KG1
 
 ```
-
 * --config: Your config file that stores the necessary configuration for running the experiments
 * --model: Your LLM for running the empirical analysis
 * --openai_api_key: Your own OPENAI API KEY
